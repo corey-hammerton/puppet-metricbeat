@@ -23,10 +23,15 @@
 # * `package_ensure`
 # [String] The desired state of Package['metricbeat']. Only valid when
 # $ensure is present. (default: 'present')
+#
+# * `path_conf`
+# [Absolute Path] The location of the configuration files. Recommend
+# leaving the default value. (default: '/etc/metricbeat')
 class metricbeat(
   Enum['present', 'absent'] $ensure = 'present',
   Boolean $manage_repo              = true,
   String $package_ensure            = 'present',
+  Stdlib::Absolutepath $path_conf   = '/etc/metricbeat',
 ) {
   if $manage_repo {
     class{'metricbeat::repo':}
@@ -39,6 +44,7 @@ class metricbeat(
   if $ensure == 'present' {
     Anchor['metricbeat::begin']
     -> Class['metricbeat::install']
+    -> Class['metricbeat::config']
   }
   else {
     Anchor['metricbeat::begin']
@@ -46,5 +52,6 @@ class metricbeat(
   }
 
   anchor{'metricbeat::begin':}
+  class{'metricbeat::config':}
   class{'metricbeat::install':}
 }

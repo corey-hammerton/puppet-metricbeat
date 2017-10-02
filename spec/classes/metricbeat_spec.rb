@@ -7,10 +7,20 @@ describe 'metricbeat' do
         let(:facts) { os_facts }
 
         it { is_expected.to compile }
-        it { is_expected.to contain_class('metricbeat::install') }
+        it { is_expected.to contain_class('metricbeat::config') }
+        it { is_expected.to contain_class('metricbeat::install').that_comes_before('Class[metricbeat::config]') }
         it { is_expected.to contain_class('metricbeat::repo').that_comes_before('Class[metricbeat::install]') }
 
         it { is_expected.to contain_package('metricbeat').with(ensure: 'present') }
+        it do
+          is_expected.to contain_file('metricbeat.yml').with(
+            ensure: 'present',
+            owner: 'root',
+            group: 'root',
+            mode: '0644',
+            path: '/etc/metricbeat/metricbeat.yml',
+          )
+        end
 
         if os_facts[:os][:family] == 'RedHat'
           it do
@@ -29,10 +39,20 @@ describe 'metricbeat' do
         let(:params) { { 'manage_repo' => false } }
 
         it { is_expected.to compile }
-        it { is_expected.to contain_class('metricbeat::install') }
+        it { is_expected.to contain_class('metricbeat::config') }
+        it { is_expected.to contain_class('metricbeat::install').that_comes_before('Class[metricbeat::config]') }
         it { is_expected.not_to contain_class('metricbeat::repo') }
 
         it { is_expected.to contain_package('metricbeat').with(ensure: 'present') }
+        it do
+          is_expected.to contain_file('metricbeat.yml').with(
+            ensure: 'present',
+            owner: 'root',
+            group: 'root',
+            mode: '0644',
+            path: '/etc/metricbeat/metricbeat.yml',
+          )
+        end
 
         if os_facts[:os][:family] == 'RedHat'
           it do
@@ -46,10 +66,17 @@ describe 'metricbeat' do
         let(:params) { { 'ensure' => 'absent' } }
 
         it { is_expected.to compile }
+        it { is_expected.to contain_class('metricbeat::config') }
         it { is_expected.to contain_class('metricbeat::install') }
         it { is_expected.to contain_class('metricbeat::repo').that_comes_before('Class[metricbeat::install]') }
 
         it { is_expected.to contain_package('metricbeat').with(ensure: 'absent') }
+        it do
+          is_expected.to contain_file('metricbeat.yml').with(
+            ensure: 'absent',
+            path: '/etc/metricbeat/metricbeat.yml',
+          )
+        end
 
         if os_facts[:os][:family] == 'RedHat'
           it do
@@ -75,10 +102,20 @@ describe 'metricbeat' do
         let(:params) { { 'package_ensure' => '5.6.2-1' } }
 
         it { is_expected.to compile }
-        it { is_expected.to contain_class('metricbeat::install') }
+        it { is_expected.to contain_class('metricbeat::config') }
+        it { is_expected.to contain_class('metricbeat::install').that_comes_before('Class[metricbeat::config]') }
         it { is_expected.to contain_class('metricbeat::repo').that_comes_before('Class[metricbeat::install]') }
 
         it { is_expected.to contain_package('metricbeat').with(ensure: '5.6.2-1') }
+        it do
+          is_expected.to contain_file('metricbeat.yml').with(
+            ensure: 'present',
+            owner: 'root',
+            group: 'root',
+            mode: '0644',
+            path: '/etc/metricbeat/metricbeat.yml',
+          )
+        end
 
         if os_facts[:os][:family] == 'RedHat'
           it do
