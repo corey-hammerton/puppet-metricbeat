@@ -27,11 +27,23 @@
 # * `path_conf`
 # [Absolute Path] The location of the configuration files. Recommend
 # leaving the default value. (default: '/etc/metricbeat')
+#
+# * `service_ensure`
+# [String] The desirec state of Service['metricbeat']. Only valid when
+# $ensure is present. Valid values are 'enabled', 'disabled', 'running'
+# or 'unmanaged'. (default: 'enabled')
+#
+# * `service_has_restart`
+# [Boolean] When true use the restart function of the init script.
+# When false the init script's stop and start functions will be used.
+# (default: true)
 class metricbeat(
-  Enum['present', 'absent'] $ensure = 'present',
-  Boolean $manage_repo              = true,
-  String $package_ensure            = 'present',
-  Stdlib::Absolutepath $path_conf   = '/etc/metricbeat',
+  Enum['present', 'absent'] $ensure                                   = 'present',
+  Boolean $manage_repo                                                = true,
+  String $package_ensure                                              = 'present',
+  Stdlib::Absolutepath $path_conf                                     = '/etc/metricbeat',
+  Enum['enabled', 'disabled', 'running', 'unmanaged'] $service_ensure = 'enabled',
+  Boolean $service_has_restart                                        = true,
 ) {
   if $manage_repo {
     class{'metricbeat::repo':}
@@ -45,13 +57,19 @@ class metricbeat(
     Anchor['metricbeat::begin']
     -> Class['metricbeat::install']
     -> Class['metricbeat::config']
+    ~> Class['metricbeat::service']
+
+    Class['metricbeat::install']
+    ~> Class['metricbeat::service']
   }
   else {
     Anchor['metricbeat::begin']
+    -> Class['metricbeat::service']
     -> Class['metricbeat::install']
   }
 
   anchor{'metricbeat::begin':}
   class{'metricbeat::config':}
   class{'metricbeat::install':}
+  class{'metricbeat::service':}
 }
