@@ -22,7 +22,12 @@ class metricbeat(
 
     Anchor['metricbeat::begin']
     -> Class['metricbeat::repo']
+    -> Class['metricbeat::install']
   }
 
+  Anchor['metricbeat::begin']
+  -> Class['metricbeat::install']
+
   anchor{'metricbeat::begin':}
+  class{'metricbeat::install':}
 }

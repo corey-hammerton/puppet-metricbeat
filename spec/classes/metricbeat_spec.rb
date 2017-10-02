@@ -7,7 +7,10 @@ describe 'metricbeat' do
         let(:facts) { os_facts }
 
         it { is_expected.to compile }
-        it { is_expected.to contain_class('metricbeat::repo') }
+        it { is_expected.to contain_class('metricbeat::install') }
+        it { is_expected.to contain_class('metricbeat::repo').that_comes_before('Class[metricbeat::install]') }
+
+        it { is_expected.to contain_package('metricbeat').with(ensure: 'present') }
 
         if os_facts[:os][:family] == 'RedHat'
           it do
@@ -26,7 +29,10 @@ describe 'metricbeat' do
         let(:params) { { 'manage_repo' => false } }
 
         it { is_expected.to compile }
+        it { is_expected.to contain_class('metricbeat::install') }
         it { is_expected.not_to contain_class('metricbeat::repo') }
+
+        it { is_expected.to contain_package('metricbeat').with(ensure: 'present') }
 
         if os_facts[:os][:family] == 'RedHat'
           it do
