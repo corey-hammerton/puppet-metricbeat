@@ -7,6 +7,6 @@ class metricbeat::install {
   assert_private()
 
   package{'metricbeat':
-    ensure => 'present',
+    ensure => $metricbeat::ensure,
   }
 }

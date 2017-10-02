@@ -11,11 +11,17 @@
 # Parameters
 # ----------
 #
+# * `ensure`
+# [String] Ensures that all required resources are managed or removed
+# from the target node. This is good for bulk uninstallation across a
+# network. Valid values are 'present' or 'absent'. (default: 'present')
+#
 # * `manage_repo`
 # [Boolean] Weather the upstream (elastic) repository should be
 # configured. (default: true)
 class metricbeat(
-  Boolean $manage_repo = true,
+  Enum['present', 'absent'] $ensure = 'present',
+  Boolean $manage_repo              = true,
 ) {
   if $manage_repo {
     class{'metricbeat::repo':}
@@ -25,8 +31,14 @@ class metricbeat(
     -> Class['metricbeat::install']
   }
 
-  Anchor['metricbeat::begin']
-  -> Class['metricbeat::install']
+  if $ensure == 'present' {
+    Anchor['metricbeat::begin']
+    -> Class['metricbeat::install']
+  }
+  else {
+    Anchor['metricbeat::begin']
+    -> Class['metricbeat::install']
+  }
 
   anchor{'metricbeat::begin':}
   class{'metricbeat::install':}
