@@ -6,7 +6,14 @@
 class metricbeat::install {
   assert_private()
 
+  if $metricbeat::ensure == 'present' {
+    $package_ensure = $metricbeat::package_ensure
+  }
+  else {
+    $package_ensure = $metricbeat::ensure
+  }
+
   package{'metricbeat':
-    ensure => $metricbeat::ensure,
+    ensure => $package_ensure,
   }
 }

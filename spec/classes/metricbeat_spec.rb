@@ -69,6 +69,28 @@ describe 'metricbeat' do
 
         it { is_expected.to raise_error(Puppet::Error) }
       end
+
+      context 'with package_ensure = 5.6.2-1' do
+        let(:facts) { os_facts }
+        let(:params) { { 'package_ensure' => '5.6.2-1' } }
+
+        it { is_expected.to compile }
+        it { is_expected.to contain_class('metricbeat::install') }
+        it { is_expected.to contain_class('metricbeat::repo').that_comes_before('Class[metricbeat::install]') }
+
+        it { is_expected.to contain_package('metricbeat').with(ensure: '5.6.2-1') }
+
+        if os_facts[:os][:family] == 'RedHat'
+          it do
+            is_expected.to contain_yumrepo('beats').with(
+              baseurl: 'https://artifacts.elastic.co/packages/5.x/yum',
+              enabled: 1,
+              gpgcheck: 1,
+              gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+            )
+          end
+        end
+      end
     end
   end
 end

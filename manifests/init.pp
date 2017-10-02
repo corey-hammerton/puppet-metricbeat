@@ -19,9 +19,14 @@
 # * `manage_repo`
 # [Boolean] Weather the upstream (elastic) repository should be
 # configured. (default: true)
+#
+# * `package_ensure`
+# [String] The desired state of Package['metricbeat']. Only valid when
+# $ensure is present. (default: 'present')
 class metricbeat(
   Enum['present', 'absent'] $ensure = 'present',
   Boolean $manage_repo              = true,
+  String $package_ensure            = 'present',
 ) {
   if $manage_repo {
     class{'metricbeat::repo':}
