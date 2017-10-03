@@ -6,6 +6,13 @@ describe 'metricbeat' do
       context 'with defaults' do
         let(:facts) { os_facts }
 
+        it { is_expected.to raise_error(Puppet::Error) }
+      end
+
+      context 'with elasticsearch output' do
+        let(:facts) { os_facts }
+        let(:params) { { 'outputs' => { 'elasticsearch' => { 'hosts' => ['http://localhost:9200'] } } } }
+
         it { is_expected.to compile }
         it { is_expected.to contain_class('metricbeat::config').that_notifies('Class[metricbeat::service]') }
         it { is_expected.to contain_class('metricbeat::install').that_comes_before('Class[metricbeat::config]').that_notifies('Class[metricbeat::service]') }
@@ -44,7 +51,7 @@ describe 'metricbeat' do
 
       context 'with manage_repo = false' do
         let(:facts) { os_facts }
-        let(:params) { { 'manage_repo' => false } }
+        let(:params) { { 'manage_repo' => false, 'outputs' => { 'elasticsearch' => { 'hosts' => ['http://localhost:9200'] } } } }
 
         it { is_expected.to compile }
         it { is_expected.to contain_class('metricbeat::config').that_notifies('Class[metricbeat::service]') }
@@ -79,7 +86,7 @@ describe 'metricbeat' do
 
       context 'with ensure = absent' do
         let(:facts) { os_facts }
-        let(:params) { { 'ensure' => 'absent' } }
+        let(:params) { { 'ensure' => 'absent', 'outputs' => { 'elasticsearch' => { 'hosts' => ['http://localhost:9200'] } } } }
 
         it { is_expected.to compile }
         it { is_expected.to contain_class('metricbeat::config') }
@@ -123,7 +130,7 @@ describe 'metricbeat' do
 
       context 'with package_ensure = 5.6.2-1' do
         let(:facts) { os_facts }
-        let(:params) { { 'package_ensure' => '5.6.2-1' } }
+        let(:params) { { 'outputs' => { 'elasticsearch' => { 'hosts' => ['http://localhost:9200'] } }, 'package_ensure' => '5.6.2-1' } }
 
         it { is_expected.to compile }
         it { is_expected.to contain_class('metricbeat::config').that_notifies('Class[metricbeat::service]') }
@@ -163,7 +170,7 @@ describe 'metricbeat' do
 
       context 'with service_has_restart = false' do
         let(:facts) { os_facts }
-        let(:params) { { 'service_has_restart' => false } }
+        let(:params) { { 'outputs' => { 'elasticsearch' => { 'hosts' => ['http://localhost:9200'] } }, 'service_has_restart' => false } }
 
         it { is_expected.to compile }
         it { is_expected.to contain_class('metricbeat::config').that_notifies('Class[metricbeat::service]') }
@@ -203,7 +210,7 @@ describe 'metricbeat' do
 
       context 'with service_ensure = disabled' do
         let(:facts) { os_facts }
-        let(:params) { { 'service_ensure' => 'disabled' } }
+        let(:params) { { 'outputs' => { 'elasticsearch' => { 'hosts' => ['http://localhost:9200'] } }, 'service_ensure' => 'disabled' } }
 
         it { is_expected.to compile }
         it { is_expected.to contain_class('metricbeat::config').that_notifies('Class[metricbeat::service]') }
@@ -243,7 +250,7 @@ describe 'metricbeat' do
 
       context 'with service_ensure = running' do
         let(:facts) { os_facts }
-        let(:params) { { 'service_ensure' => 'running' } }
+        let(:params) { { 'outputs' => { 'elasticsearch' => { 'hosts' => ['http://localhost:9200'] } }, 'service_ensure' => 'running' } }
 
         it { is_expected.to compile }
         it { is_expected.to contain_class('metricbeat::config').that_notifies('Class[metricbeat::service]') }
@@ -283,7 +290,7 @@ describe 'metricbeat' do
 
       context 'with service_ensure = unmanaged' do
         let(:facts) { os_facts }
-        let(:params) { { 'service_ensure' => 'unmanaged' } }
+        let(:params) { { 'outputs' => { 'elasticsearch' => { 'hosts' => ['http://localhost:9200'] } }, 'service_ensure' => 'unmanaged' } }
 
         it { is_expected.to compile }
         it { is_expected.to contain_class('metricbeat::config').that_notifies('Class[metricbeat::service]') }

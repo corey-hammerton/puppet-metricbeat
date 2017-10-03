@@ -11,6 +11,10 @@
 # Parameters
 # ----------
 #
+# * `outputs`
+# [Hash] Configures the output(s) this Metricbeat instance should send
+# to. Required!
+#
 # * `ensure`
 # [String] Ensures that all required resources are managed or removed
 # from the target node. This is good for bulk uninstallation across a
@@ -38,6 +42,7 @@
 # When false the init script's stop and start functions will be used.
 # (default: true)
 class metricbeat(
+  Hash $outputs,
   Enum['present', 'absent'] $ensure                                   = 'present',
   Boolean $manage_repo                                                = true,
   String $package_ensure                                              = 'present',
