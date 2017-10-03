@@ -12,6 +12,7 @@ class metricbeat::config {
     'fields_under_root' => $metricbeat::fields_under_root,
     'tags'              => $metricbeat::tags,
     'queue_size'        => $metricbeat::queue_size,
+    'modules'           => $metricbeat::modules,
     'output'            => $metricbeat::outputs,
   })
 

@@ -11,6 +11,10 @@
 # Parameters
 # ----------
 #
+# * `modules`
+# Tuple[Hash] The array of modules this instance of metricbeat will
+# collect. Required!
+#
 # * `outputs`
 # [Hash] Configures the output(s) this Metricbeat instance should send
 # to. Required!
@@ -64,6 +68,7 @@
 # `tag` field of each published transaction. This is useful for
 # identifying groups of servers by logical property. (default: undef)
 class metricbeat(
+  Tuple[Hash] $modules,
   Hash $outputs,
   String $beat_name                                                   = $::hostname,
   Enum['present', 'absent'] $ensure                                   = 'present',
