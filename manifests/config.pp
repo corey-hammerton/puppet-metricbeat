@@ -7,7 +7,12 @@ class metricbeat::config {
   assert_private()
 
   $metricbeat_config = delete_undef_values({
-    'output' => $metricbeat::outputs,
+    'name'              => $metricbeat::beat_name,
+    'fields'            => $metricbeat::fields,
+    'fields_under_root' => $metricbeat::fields_under_root,
+    'tags'              => $metricbeat::tags,
+    'queue_size'        => $metricbeat::queue_size,
+    'output'            => $metricbeat::outputs,
   })
 
   file{'metricbeat.yml':
