@@ -23,6 +23,10 @@
 # [String] The name of the beat which is published as the `beat.name`
 # field of each transaction. (default: $::hostname)
 #
+# * `disable_configtest`
+# [Boolean] If true disable configuration file testing. It is generally
+# recommended to leave this parameter at its default value. (default: false)
+#
 # * `ensure`
 # [String] Ensures that all required resources are managed or removed
 # from the target node. This is good for bulk uninstallation across a
@@ -76,6 +80,7 @@ class metricbeat(
   Tuple[Hash] $modules,
   Hash $outputs,
   String $beat_name                                                   = $::hostname,
+  Boolean $disable_configtest                                         = false,
   Enum['present', 'absent'] $ensure                                   = 'present',
   Optional[Hash] $fields                                              = undef,
   Boolean $fields_under_root                                          = false,

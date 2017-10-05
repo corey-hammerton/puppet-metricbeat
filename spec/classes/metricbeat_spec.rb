@@ -381,6 +381,53 @@ describe 'metricbeat' do
 
         it { is_expected.to raise_error(Puppet::Error) }
       end
+
+      context 'with disable_configtest = true' do
+        let(:facts) { os_facts }
+        let(:params) do
+          {
+            'disable_configtest' => true,
+            'modules'            => [{ 'module' => 'system', 'metricsets' => %w[cpu memory], 'period' => '10s' }],
+            'outputs'            => { 'elasticsearch' => { 'hosts' => ['http://localhost:9200'] } },
+          }
+        end
+
+        it { is_expected.to compile }
+        it { is_expected.to contain_class('metricbeat::config').that_notifies('Class[metricbeat::service]') }
+        it { is_expected.to contain_class('metricbeat::install').that_comes_before('Class[metricbeat::config]').that_notifies('Class[metricbeat::service]') }
+        it { is_expected.to contain_class('metricbeat::service') }
+        it { is_expected.to contain_class('metricbeat::repo').that_comes_before('Class[metricbeat::install]') }
+
+        it { is_expected.to contain_package('metricbeat').with(ensure: 'present') }
+        it do
+          is_expected.to contain_file('metricbeat.yml').with(
+            ensure: 'present',
+            owner: 'root',
+            group: 'root',
+            mode: '0644',
+            path: '/etc/metricbeat/metricbeat.yml',
+            validate_cmd: nil,
+          )
+        end
+        it do
+          is_expected.to contain_service('metricbeat').with(
+            ensure: 'running',
+            enable: true,
+            hasrestart: true,
+          )
+        end
+
+        if os_facts[:os][:family] == 'RedHat'
+          it do
+            is_expected.to contain_yumrepo('beats').with(
+              baseurl: 'https://artifacts.elastic.co/packages/5.x/yum',
+              enabled: 1,
+              gpgcheck: 1,
+              gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+            )
+          end
+        end
+      end
     end
   end
 end

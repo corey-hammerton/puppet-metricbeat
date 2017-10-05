@@ -6,6 +6,10 @@
 class metricbeat::config {
   assert_private()
 
+  $validate_cmd      = $metricbeat::disable_configtest ? {
+    true    => undef,
+    default => '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
+  }
   $metricbeat_config = delete_undef_values({
     'name'              => $metricbeat::beat_name,
     'fields'            => $metricbeat::fields,
@@ -21,11 +25,12 @@ class metricbeat::config {
   })
 
   file{'metricbeat.yml':
-    ensure  => $metricbeat::ensure,
-    path    => '/etc/metricbeat/metricbeat.yml',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    content => inline_template('<%= @metricbeat_config.to_yaml() %>'),
+    ensure       => $metricbeat::ensure,
+    path         => '/etc/metricbeat/metricbeat.yml',
+    owner        => 'root',
+    group        => 'root',
+    mode         => '0644',
+    content      => inline_template('<%= @metricbeat_config.to_yaml() %>'),
+    validate_cmd => $validate_cmd,
   }
 }
