@@ -37,6 +37,10 @@
 # sub-dictionary. When this is true custom fields are added to the top
 # level dictionary of each transaction. (default: false)
 #
+# * `logging`
+# [Hash] The configuration section of File['metricbeat.yml'] for the
+# logging output. 
+#
 # * `manage_repo`
 # [Boolean] Weather the upstream (elastic) repository should be
 # configured. (default: true)
@@ -45,9 +49,10 @@
 # [String] The desired state of Package['metricbeat']. Only valid when
 # $ensure is present. (default: 'present')
 #
-# * `path_conf`
-# [Absolute Path] The location of the configuration files. Recommend
-# leaving the default value. (default: '/etc/metricbeat')
+# * `processors`
+# Optional[Array[Hash]] An optional list of dictionaries to configure
+# processors, provided by libbeat, to process events before they are
+# sent to the output. (default: undef)
 #
 # * `queue_size`
 # [Integer] The size of the internal queue for single events in the
@@ -74,9 +79,25 @@ class metricbeat(
   Enum['present', 'absent'] $ensure                                   = 'present',
   Optional[Hash] $fields                                              = undef,
   Boolean $fields_under_root                                          = false,
+  Hash $logging                                                       = {
+    'level'     => 'info',
+    'files'     => {
+      'keepfiles'        => 7,
+      'name'             => 'metricbeat',
+      'path'             => '/var/log/metricbeat',
+      'rotateeverybytes' => '10485760',
+    },
+    'metrics'   => {
+      'enabled' => false,
+      'period'  => '30s',
+    },
+    'selectors' => undef,
+    'to_files'  => true,
+    'to_syslog' => false,
+  },
   Boolean $manage_repo                                                = true,
   String $package_ensure                                              = 'present',
-  Stdlib::Absolutepath $path_conf                                     = '/etc/metricbeat',
+  Optional[Array[Hash]] $processors                                   = undef,
   Integer $queue_size                                                 = 1000,
   Enum['enabled', 'disabled', 'running', 'unmanaged'] $service_ensure = 'enabled',
   Boolean $service_has_restart                                        = true,
