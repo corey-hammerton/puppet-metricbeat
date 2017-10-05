@@ -3,6 +3,7 @@
 ---
 fixtures:
   forge_modules:
+    apt: "puppetlabs/apt"
     stdlib: "puppetlabs/stdlib"
   symlinks:
     metricbeat: "#{source_dir}"

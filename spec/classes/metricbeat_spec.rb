@@ -50,6 +50,18 @@ describe 'metricbeat' do
               gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
             )
           end
+        elsif os_facts[:os][:family] == 'Debian'
+          it do
+            is_expected.to contain_apt__source('beats').with(
+              location: 'https://artifacts.elastic.co/packages/5.x/apt',
+              release: 'stable',
+              repos: 'main',
+              key: {
+                id: '46095ACC8548582C1A2699A9D27D666CD88E42B4',
+                source: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+              },
+            )
+          end
         end
       end
 
@@ -87,9 +99,9 @@ describe 'metricbeat' do
         end
 
         if os_facts[:os][:family] == 'RedHat'
-          it do
-            is_expected.not_to contain_yumrepo('beats')
-          end
+          it { is_expected.not_to contain_yumrepo('beats') }
+        elsif os_facts[:os][:family] == 'Debian'
+          it { is_exptected.not_to contain_apt('beats') }
         end
       end
 
@@ -130,6 +142,18 @@ describe 'metricbeat' do
               enabled: 1,
               gpgcheck: 1,
               gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+            )
+          end
+        elsif os_facts[:os][:family] == 'Debian'
+          it do
+            is_expected.to contain_apt__source('beats').with(
+              location: 'https://artifacts.elastic.co/packages/5.x/apt',
+              release: 'stable',
+              repos: 'main',
+              key: {
+                id: '46095ACC8548582C1A2699A9D27D666CD88E42B4',
+                source: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+              },
             )
           end
         end
@@ -183,6 +207,18 @@ describe 'metricbeat' do
               gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
             )
           end
+        elsif os_facts[:os][:family] == 'Debian'
+          it do
+            is_expected.to contain_apt__source('beats').with(
+              location: 'https://artifacts.elastic.co/packages/5.x/apt',
+              release: 'stable',
+              repos: 'main',
+              key: {
+                id: '46095ACC8548582C1A2699A9D27D666CD88E42B4',
+                source: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+              },
+            )
+          end
         end
       end
 
@@ -226,6 +262,18 @@ describe 'metricbeat' do
               enabled: 1,
               gpgcheck: 1,
               gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+            )
+          end
+        elsif os_facts[:os][:family] == 'Debian'
+          it do
+            is_expected.to contain_apt__source('beats').with(
+              location: 'https://artifacts.elastic.co/packages/5.x/apt',
+              release: 'stable',
+              repos: 'main',
+              key: {
+                id: '46095ACC8548582C1A2699A9D27D666CD88E42B4',
+                source: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+              },
             )
           end
         end
@@ -273,6 +321,18 @@ describe 'metricbeat' do
               gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
             )
           end
+        elsif os_facts[:os][:family] == 'Debian'
+          it do
+            is_expected.to contain_apt__source('beats').with(
+              location: 'https://artifacts.elastic.co/packages/5.x/apt',
+              release: 'stable',
+              repos: 'main',
+              key: {
+                id: '46095ACC8548582C1A2699A9D27D666CD88E42B4',
+                source: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+              },
+            )
+          end
         end
       end
 
@@ -318,6 +378,18 @@ describe 'metricbeat' do
               gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
             )
           end
+        elsif os_facts[:os][:family] == 'Debian'
+          it do
+            is_expected.to contain_apt__source('beats').with(
+              location: 'https://artifacts.elastic.co/packages/5.x/apt',
+              release: 'stable',
+              repos: 'main',
+              key: {
+                id: '46095ACC8548582C1A2699A9D27D666CD88E42B4',
+                source: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+              },
+            )
+          end
         end
       end
 
@@ -361,6 +433,18 @@ describe 'metricbeat' do
               enabled: 1,
               gpgcheck: 1,
               gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+            )
+          end
+        elsif os_facts[:os][:family] == 'Debian'
+          it do
+            is_expected.to contain_apt__source('beats').with(
+              location: 'https://artifacts.elastic.co/packages/5.x/apt',
+              release: 'stable',
+              repos: 'main',
+              key: {
+                id: '46095ACC8548582C1A2699A9D27D666CD88E42B4',
+                source: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+              },
             )
           end
         end
@@ -413,6 +497,18 @@ describe 'metricbeat' do
               enabled: 1,
               gpgcheck: 1,
               gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+            )
+          end
+        elsif os_facts[:os][:family] == 'Debian'
+          it do
+            is_expected.to contain_apt__source('beats').with(
+              location: 'https://artifacts.elastic.co/packages/5.x/apt',
+              release: 'stable',
+              repos: 'main',
+              key: {
+                id: '46095ACC8548582C1A2699A9D27D666CD88E42B4',
+                source: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+              },
             )
           end
         end
