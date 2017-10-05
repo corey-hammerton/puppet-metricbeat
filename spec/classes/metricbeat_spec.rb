@@ -3,14 +3,13 @@ require 'spec_helper'
 describe 'metricbeat' do
   on_supported_os(facterversion: '2.4').each do |os, os_facts|
     context "on #{os}" do
-      context 'with defaults' do
-        let(:facts) { os_facts }
+      let(:facts) { os_facts }
 
+      context 'with defaults' do
         it { is_expected.to raise_error(Puppet::Error) }
       end
 
       context 'with elasticsearch output' do
-        let(:facts) { os_facts }
         let(:params) do
           {
             'modules' => [{ 'module' => 'system', 'metricsets' => %w[cpu memory], 'period' => '10s' }],
@@ -55,7 +54,6 @@ describe 'metricbeat' do
       end
 
       context 'with manage_repo = false' do
-        let(:facts) { os_facts }
         let(:params) do
           {
             'manage_repo' => false,
@@ -96,7 +94,6 @@ describe 'metricbeat' do
       end
 
       context 'with ensure = absent' do
-        let(:facts) { os_facts }
         let(:params) do
           {
             'ensure'  => 'absent',
@@ -139,14 +136,12 @@ describe 'metricbeat' do
       end
 
       context 'with ensure = idontknow' do
-        let(:facts) { os_facts }
         let(:params) { { 'ensure' => 'idontknow' } }
 
         it { is_expected.to raise_error(Puppet::Error) }
       end
 
       context 'with package_ensure = 5.6.2-1' do
-        let(:facts) { os_facts }
         let(:params) do
           {
             'modules'        => [{ 'module' => 'system', 'metricsets' => %w[cpu memory], 'period' => '10s' }],
@@ -192,7 +187,6 @@ describe 'metricbeat' do
       end
 
       context 'with service_has_restart = false' do
-        let(:facts) { os_facts }
         let(:params) do
           {
             'modules'             => [{ 'module' => 'system', 'metricsets' => %w[cpu memory], 'period' => '10s' }],
@@ -238,7 +232,6 @@ describe 'metricbeat' do
       end
 
       context 'with service_ensure = disabled' do
-        let(:facts) { os_facts }
         let(:params) do
           {
             'modules'        => [{ 'module' => 'system', 'metricsets' => %w[cpu memory], 'period' => '10s' }],
@@ -284,7 +277,6 @@ describe 'metricbeat' do
       end
 
       context 'with service_ensure = running' do
-        let(:facts) { os_facts }
         let(:params) do
           {
             'modules'        => [{ 'module' => 'system', 'metricsets' => %w[cpu memory], 'period' => '10s' }],
@@ -330,7 +322,6 @@ describe 'metricbeat' do
       end
 
       context 'with service_ensure = unmanaged' do
-        let(:facts) { os_facts }
         let(:params) do
           {
             'modules'        => [{ 'module' => 'system', 'metricsets' => %w[cpu memory], 'period' => '10s' }],
@@ -376,14 +367,12 @@ describe 'metricbeat' do
       end
 
       context 'with service_ensure = thisisnew' do
-        let(:facts) { os_facts }
         let(:params) { { 'ensure' => 'thisisnew' } }
 
         it { is_expected.to raise_error(Puppet::Error) }
       end
 
       context 'with disable_configtest = true' do
-        let(:facts) { os_facts }
         let(:params) do
           {
             'disable_configtest' => true,
