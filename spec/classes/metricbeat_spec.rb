@@ -62,6 +62,18 @@ describe 'metricbeat' do
               },
             )
           end
+        elsif os_facts[:os][:family] == 'SuSe'
+          it do
+            is_expected.to contain_zypprepo('beats').with(
+              baseurl: 'https://artifacts.elastic.co/packages/5.x/yum',
+              autorefresh: 1,
+              enabled: 1,
+              gpgcheck: 1,
+              gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+              name: 'beats',
+              type: 'yum',
+            )
+          end
         end
       end
 
@@ -102,6 +114,8 @@ describe 'metricbeat' do
           it { is_expected.not_to contain_yumrepo('beats') }
         elsif os_facts[:os][:family] == 'Debian'
           it { is_exptected.not_to contain_apt('beats') }
+        elsif os_facts[:os][:family] == 'SuSe'
+          it { is_expected.not_to contain_zypprepo('beats') }
         end
       end
 
@@ -154,6 +168,18 @@ describe 'metricbeat' do
                 id: '46095ACC8548582C1A2699A9D27D666CD88E42B4',
                 source: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
               },
+            )
+          end
+        elsif os_facts[:os][:family] == 'SuSe'
+          it do
+            is_expected.to contain_zypprepo('beats').with(
+              baseurl: 'https://artifacts.elastic.co/packages/5.x/yum',
+              autorefresh: 1,
+              enabled: 1,
+              gpgcheck: 1,
+              gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+              name: 'beats',
+              type: 'yum',
             )
           end
         end
@@ -219,6 +245,18 @@ describe 'metricbeat' do
               },
             )
           end
+        elsif os_facts[:os][:family] == 'SuSe'
+          it do
+            is_expected.to contain_zypprepo('beats').with(
+              baseurl: 'https://artifacts.elastic.co/packages/5.x/yum',
+              autorefresh: 1,
+              enabled: 1,
+              gpgcheck: 1,
+              gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+              name: 'beats',
+              type: 'yum',
+            )
+          end
         end
       end
 
@@ -274,6 +312,18 @@ describe 'metricbeat' do
                 id: '46095ACC8548582C1A2699A9D27D666CD88E42B4',
                 source: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
               },
+            )
+          end
+        elsif os_facts[:os][:family] == 'SuSe'
+          it do
+            is_expected.to contain_zypprepo('beats').with(
+              baseurl: 'https://artifacts.elastic.co/packages/5.x/yum',
+              autorefresh: 1,
+              enabled: 1,
+              gpgcheck: 1,
+              gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+              name: 'beats',
+              type: 'yum',
             )
           end
         end
@@ -333,6 +383,18 @@ describe 'metricbeat' do
               },
             )
           end
+        elsif os_facts[:os][:family] == 'SuSe'
+          it do
+            is_expected.to contain_zypprepo('beats').with(
+              baseurl: 'https://artifacts.elastic.co/packages/5.x/yum',
+              autorefresh: 1,
+              enabled: 1,
+              gpgcheck: 1,
+              gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+              name: 'beats',
+              type: 'yum',
+            )
+          end
         end
       end
 
@@ -390,6 +452,18 @@ describe 'metricbeat' do
               },
             )
           end
+        elsif os_facts[:os][:family] == 'SuSe'
+          it do
+            is_expected.to contain_zypprepo('beats').with(
+              baseurl: 'https://artifacts.elastic.co/packages/5.x/yum',
+              autorefresh: 1,
+              enabled: 1,
+              gpgcheck: 1,
+              gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+              name: 'beats',
+              type: 'yum',
+            )
+          end
         end
       end
 
@@ -445,6 +519,18 @@ describe 'metricbeat' do
                 id: '46095ACC8548582C1A2699A9D27D666CD88E42B4',
                 source: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
               },
+            )
+          end
+        elsif os_facts[:os][:family] == 'SuSe'
+          it do
+            is_expected.to contain_zypprepo('beats').with(
+              baseurl: 'https://artifacts.elastic.co/packages/5.x/yum',
+              autorefresh: 1,
+              enabled: 1,
+              gpgcheck: 1,
+              gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+              name: 'beats',
+              type: 'yum',
             )
           end
         end
@@ -509,6 +595,18 @@ describe 'metricbeat' do
                 id: '46095ACC8548582C1A2699A9D27D666CD88E42B4',
                 source: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
               },
+            )
+          end
+        elsif os_facts[:os][:family] == 'SuSe'
+          it do
+            is_expected.to contain_zypprepo('beats').with(
+              baseurl: 'https://artifacts.elastic.co/packages/5.x/yum',
+              autorefresh: 1,
+              enabled: 1,
+              gpgcheck: 1,
+              gpgkey: 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+              name: 'beats',
+              type: 'yum',
             )
           end
         end

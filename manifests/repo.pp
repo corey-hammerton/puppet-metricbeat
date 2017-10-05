@@ -33,6 +33,24 @@ class metricbeat::repo {
         }
       }
     }
+    'SuSe': {
+      exec { 'topbeat_suse_import_gpg':
+        command => '/usr/bin/rpmkeys --import https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+        unless  => '/usr/bin/test $(rpm -qa gpg-pubkey | grep -i "D88E42B4" | wc -l) -eq 1 ',
+        notify  => [ Zypprepo['beats'] ],
+      }
+      if !defined (Zypprepo['beats']) {
+        zypprepo{'beats':
+          baseurl     => 'https://artifacts.elastic.co/packages/5.x/yum',
+          enabled     => 1,
+          autorefresh => 1,
+          name        => 'beats',
+          gpgcheck    => 1,
+          gpgkey      => 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
+          type        => 'yum',
+        }
+      }
+    }
     default: {
     }
   }
