@@ -54,7 +54,7 @@
 # $ensure is present. (default: 'present')
 #
 # * `processors`
-# Optional[Array[Hash]] An optional list of dictionaries to configure
+# Optional[Tuple[Hash]] An optional list of dictionaries to configure
 # processors, provided by libbeat, to process events before they are
 # sent to the output. (default: undef)
 #
@@ -102,7 +102,7 @@ class metricbeat(
   },
   Boolean $manage_repo                                                = true,
   String $package_ensure                                              = 'present',
-  Optional[Array[Hash]] $processors                                   = undef,
+  Optional[Tuple[Hash]] $processors                                   = undef,
   Integer $queue_size                                                 = 1000,
   Enum['enabled', 'disabled', 'running', 'unmanaged'] $service_ensure = 'enabled',
   Boolean $service_has_restart                                        = true,
