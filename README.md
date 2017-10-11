@@ -6,66 +6,229 @@
 1. [Description](#description)
 2. [Setup - The basics of getting started with metricbeat](#setup)
     * [What metricbeat affects](#what-metricbeat-affects)
-    * [Setup requirements](#setup-requirements)
     * [Beginning with metricbeat](#beginning-with-metricbeat)
 3. [Usage - Configuration options and additional functionality](#usage)
+    * [Processors](#processors)
 4. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
+    * [Public Classes](#public-classes)
+    * [Private Classes](#private-classes)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Development - Guide for contributing to the module](#development)
+    * [Testing](#testing)
 
 ## Description
 
-Start with a one- or two-sentence summary of what the module does and/or what problem it solves. This is your 30-second elevator pitch for your module. Consider including OS/Puppet version it works with.       
-
-You can give more descriptive information in a second paragraph. This paragraph should answer the questions: "What does this module *do*?" and "Why would I use it?" If your module has a range of functionality (installation, configuration, management, etc.), this is the time to mention it.
+The `metricbeat` installs the [metricbeat operating system and service collector](https://www.elastic.co/guide/en/beats/metricbeat/current/index.html) maintained by elastic.
 
 ## Setup
 
-### What metricbeat affects **OPTIONAL**
+### What metricbeat affects
 
-If it's obvious what your module touches, you can skip this section. For example, folks can probably figure out that your mysql_instance module affects their MySQL instances.
-
-If there's more that they should know about, though, this is the place to mention:
-
-* Files, packages, services, or operations that the module will alter, impact, or execute.
-* Dependencies that your module automatically installs.
-* Warnings or other important notices.
-
-### Setup Requirements **OPTIONAL**
-
-If your module requires anything extra before setting up (pluginsync enabled, another module, etc.), mention it here. 
-  
-If your most recent release breaks compatibility or requires particular steps for upgrading, you might want to include an additional "Upgrading" section here.
+By default `metricbeat` adds a software repository to your system and installs metricbeat
+along with required configurations.
 
 ### Beginning with metricbeat  
 
-The very basic steps needed for a user to get the module up and running. This can include setup steps, if necessary, or it can be an example of the most basic use of the module.
+`metricbeat` requires the `modules` and `outputs` parameters to be declared, without which
+Puppet will exit with a failed run.
+
+```puppet
+class{'metricbeat':
+  modules => [
+    {
+      'module'     => 'system',
+      'metricsets' => [
+        'cpu',
+        'load',
+        'memory',
+        'process',
+      ],
+      'processes'  => ['.*'],
+    },
+  ],
+  outputs => {
+    'elasticsearch' => {
+      'hosts' => ['http://localhost:9200'],
+      'index' => 'metricbeat',
+    },
+  },
+}
+```
 
 ## Usage
 
-This section is where you describe how to customize, configure, and do the fancy stuff with your module here. It's especially helpful if you include usage examples and code samples for doing things with your module.
+As of this writing all the default values follow the upstream values. This module saves all configuration
+options in a `to_yaml()` fashion. Therefore this allows some advanced configuration settings to be easily
+rendered.
+
+To ship metrics from an Apache Web Server to [Elasticsearch](https://www.elastic.co/guide/en/beats/metricbeat/current/elasticsearch-output.html)
+
+```puppet
+class{'metricbeat':
+  modules => [
+    {
+      'module'     => 'apache',
+      'metricsets' => ['status'],
+      'hosts'      => ['http://localhost'],
+    },
+  ],
+  outputs => {
+    'elasticsearch' => {
+      'hosts' => ['http://localhost:9200'],
+    },
+  },
+}
+```
+
+To ship metrics from a MySQL Database Server to [Logstash](https://www.elastic.co/guide/en/beats/metricbeat/current/logstash-output.html)
+
+```puppet
+class{'metricbeat':
+  modules => {
+    'module' => 'mysql',
+    'metricsets' => ['status'],
+    'hosts'      => ['tcp(127.0.0.1:3306)/']
+    'username'   => 'root',
+    'password'   => 'secret',
+  },
+  outputs => {
+    'logstash' => {
+      'hosts' => ['localhost:5044'],
+    },
+  },
+}
+```
+
+Please review the [elastic documentation](https://www.elastic.co/guide/en/beats/metricbeat/current/index.html) for configuration options
+and service compatability.
+
+### Processors
+
+
+Libbeat 5.0 and later include a feature for filtering/enhancing exported data
+called [processors](https://www.elastic.co/guide/en/beats/metricbeat/current/configuration-processors.html).
+These may be added into the configuration by populating the `processors` parameter
+and may apply to all events or those that match certain conditions.
+
+To drop events when field `apache.status.total_accesses` is 0
+```puppet
+class{'metricbeat':
+  processors => [
+    {
+      'drop_event' => {
+        'when' => {
+          'apache.status.total_accesses' => 0,
+        }
+      }
+    }
+  ],
+  ...
+}
+```
+
+To drop the `mysql.status.aborted.clients` field from the output
+```
+class{'metricbeat':
+  processors => [
+    {
+      'drop_field' => {
+        'fields' => 'mysql.status.aborted.clients',
+      }
+    }
+  ]
+}
+```
+
+Please review the [documentation](https://www.elastic.co/guide/en/beats/metricbeat/current/configuration-processors.html)
 
 ## Reference
+  - [**Public Classes](#public-classes)
+    - [Class: metricbeat](#class-metricbeat)
+ - [**Private Classes**](#private-classes)
+    - [Class: metricbeat::config](#class-metricbeatconfig)
+    - [Class: metricbeat::install](#class-metricbeatinstall)
+    - [Class: metricbeat::repo](#class-metricbeatrepo)
+    - [Class: metricbeat::service](#class-metricbeatservice)
 
-Users need a complete list of your module's classes, types, defined types providers, facts, and functions, along with the parameters for each. You can provide this list either via Puppet Strings code comments or as a complete list in the README Reference section.
+### Public Classes
 
-* If you are using Puppet Strings code comments, this Reference section should include Strings information so that your users know how to access your documentation.
+#### Class: `metricbeat`
 
-* If you are not using Puppet Strings, include a list of all of your classes, defined types, and so on, along with their parameters. Each element in this listing should include:
+Installs and configures metricbeat.
 
-  * The data type, if applicable.
-  * A description of what the element does.
-  * Valid values, if the data type doesn't make it obvious.
-  * Default value, if any.
+**Parameters within `metricbeat`**
+- `modules`: [Tuple[Hash]] The required metricbeat.modules section of the configuration.
+- `outputs`: [Hash] The required output section of the configuration.
+- `beat_name`: [String] The name of the beat shipper (default: hostname)
+- `ensure`: [String] Valid values are 'present' and 'absent'. Determines weather
+  to manage all required resources or remove them from the node. (default: 'present')
+- `disable_config_test`: [Boolean] If true, disable configuration file testing. It
+   is generally recommended to leave this parameter at this default value.
+   (default: false)
+- `fields`: [Hash] Optional fields to add any additional information to the output.
+  (default: undef)
+- `fields_under_root`: [Boolean] By default custom fields are under a `fields`
+  sub-dictionary. When set to true custom fields are added to the root-level
+  document. (default: false)
+- `logging`: [Hash] Defines metricbeat's logging configuration, if not explicitly
+  configured all logging output is forwarded to syslog on Linux nodes and file
+  output on Windows. See the [docs](https://www.elastic.co/guide/en/beats/metricbeat/current/configuration-logging.html) for all available options.
+- `manage_repo`: [Boolean] When false does not install the upstream repository
+  to the node's package manager. (default: true)
+- `package_ensure`: [String] The desired state of the Package resources. Only
+  applicable if `ensure` is 'present'. (default: 'present')
+- `processors`: [Array[Hash]] Add processors to the configuration to run on data
+  before sending to the output. (default: undef)
+- `queue_size`: [Integer] The queue size for single events in the processing
+  pipeline. (default: 1000)
+- `service_ensure`: [String] Determine the state of the metricbeat service. Must
+  be one of 'enabled', 'disabled', 'running', 'unmanaged'. (default: enabled)
+- `service_has_restart`: [Boolean] When true the Service resource issues the
+  'restart' command instead of 'stop' and 'start'. (default: true)
+- `tags`: [Array] Optional list of tags to help group different logical properties
+  easily. (default: undef)
+
+
+### Private Classes
+
+#### Class: `metricbeat::config`
+
+Manages metricbeats main configuration file.
+
+#### Class: `metricbeat::install`
+
+Installs the metricbeat package.
+
+#### Class: `metricbeat::repo`
+
+Installs the upstream Yum or Apt repository for the system package manager.
+
+#### Class: `metricbeat::service`
+
+Manages the metricbeat service.
 
 ## Limitations
 
-This is where you list OS compatibility, version compatibility, etc. If there are Known Issues, you might want to include them under their own heading here.
+This module does not support loading [kibana dashboards](https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-sample-dashboards.html)
+or [elasticsearch templates](https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-template.html), used when outputting
+to Elasticsearch.
 
 ## Development
 
-Since your module is awesome, other users will want to play with it. Let them know what the ground rules for contributing are.
+Pull requests and bug reports are welcome. If you're sending a pull request,
+please consider writing tests if applicable.
 
-## Release Notes/Contributors/Etc. **Optional**
+### Testing
 
-If you aren't using changelog, put your release notes here (though you should consider using changelog). You can also add any additional sections you feel are necessary or important to include here. Please use the `## ` header. 
+Sandbox testing is done through the [PDK](https://puppet.com/docs/pdk/1.0/index.html) utility provided by
+Puppet. To utilize `PDK` execute the following commands to validate and
+test the new code:
+
+1. Validate syntax of `metadata.json`, all `*.pp*` and all `*.rb` files
+```
+pdk validate
+```
+2. Perform tests
+```
+pdk test unit
+```

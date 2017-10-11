@@ -6,7 +6,20 @@
 # @summary Install, configures and manages Metricbeat on the target node.
 #
 # @example
-#   include metricbeat
+#  class{'metricbeat':
+#    modules => [
+#      {
+#        'module'     => 'apache',
+#        'metricsets' => ['status'],
+#        'hosts'      => ['http://localhost'],
+#      },
+#    ],
+#    outputs => {
+#      'elasticsearch' => {
+#        'hosts' => ['http://localhost:9200'],
+#      },
+#    },
+#  }
 #
 # Parameters
 # ----------
