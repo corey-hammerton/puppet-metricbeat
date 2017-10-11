@@ -27,10 +27,6 @@ matrix:
       env: CHECK="syntax lint"
     -
       env: CHECK=metadata_lint
-branches:
-  only:
-    - master
-    - /^v\d/
 notifications:
   email: false
 deploy:
