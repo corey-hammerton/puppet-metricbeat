@@ -1,11 +1,10 @@
 # metricbeat::install
+# @api private
 #
 # Manages the state of Package['metricbeat']
 #
 # @summary Manages the state of Package['metricbeat']
-class metricbeat::install {
-  assert_private()
-
+class metricbeat::install inherits metricbeat {
   if $metricbeat::ensure == 'present' {
     $package_ensure = $metricbeat::package_ensure
   }

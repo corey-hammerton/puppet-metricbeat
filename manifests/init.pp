@@ -26,11 +26,11 @@
 #
 # * `modules`
 # Tuple[Hash] The array of modules this instance of metricbeat will
-# collect. Required!
+# collect. (default: [{}])
 #
 # * `outputs`
 # [Hash] Configures the output(s) this Metricbeat instance should send
-# to. Required!
+# to. (default: {})
 #
 # * `beat_name`
 # [String] The name of the beat which is published as the `beat.name`
@@ -90,8 +90,8 @@
 # `tag` field of each published transaction. This is useful for
 # identifying groups of servers by logical property. (default: undef)
 class metricbeat(
-  Tuple[Hash] $modules,
-  Hash $outputs,
+  Tuple[Hash] $modules                                                = [{}],
+  Hash $outputs                                                       = {},
   String $beat_name                                                   = $::hostname,
   Boolean $disable_configtest                                         = false,
   Enum['present', 'absent'] $ensure                                   = 'present',
