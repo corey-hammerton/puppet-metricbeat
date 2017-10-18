@@ -29,8 +29,9 @@ along with required configurations.
 
 ### Beginning with metricbeat  
 
-`metricbeat` requires the `modules` and `outputs` parameters to be declared, without which
-Puppet will exit with a failed run.
+Full `metricbeat` functionality cam be configured with the `modules` and `outputs` parameters
+declared. This module can run but the metricbeat agent on the nodes may not start their
+services without these parameters defined.
 
 ```puppet
 class{'metricbeat':
@@ -142,7 +143,7 @@ class{'metricbeat':
 Please review the [documentation](https://www.elastic.co/guide/en/beats/metricbeat/current/configuration-processors.html)
 
 ## Reference
-  - [**Public Classes](#public-classes)
+ - [**Public Classes**](#public-classes)
     - [Class: metricbeat](#class-metricbeat)
  - [**Private Classes**](#private-classes)
     - [Class: metricbeat::config](#class-metricbeatconfig)
