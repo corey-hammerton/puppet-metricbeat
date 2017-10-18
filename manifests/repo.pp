@@ -1,11 +1,10 @@
 # metricbeat::repo
+# @api private
 #
 # If included, configure the relevant repo manager on the target node.
 #
 # @summary Manages the relevant repo manager on the target node.
-class metricbeat::repo {
-  assert_private()
-
+class metricbeat::repo inherits metricbeat {
   case $facts['osfamily'] {
     'Debian': {
       include ::apt

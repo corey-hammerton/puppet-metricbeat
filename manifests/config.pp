@@ -1,11 +1,10 @@
 # metricbeat::config
+# @api private
 #
 # Manages the state and contests of Metricbeat's configuration file
 #
 # @summary Manages Metricbeat's configuration file
-class metricbeat::config {
-  assert_private()
-
+class metricbeat::config inherits metricbeat {
   $validate_cmd      = $metricbeat::disable_configtest ? {
     true    => undef,
     default => '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
