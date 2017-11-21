@@ -58,6 +58,10 @@
 # [Hash] The configuration section of File['metricbeat.yml'] for the
 # logging output. 
 #
+# * `major_version`
+# [Enum] The major version of Metricbeat to install from vendor repositories.
+# Valid values are '5' and '6'. (default: '5')
+#
 # * `manage_repo`
 # [Boolean] Weather the upstream (elastic) repository should be
 # configured. (default: true)
@@ -109,6 +113,7 @@ class metricbeat(
     'to_files'  => true,
     'to_syslog' => false,
   },
+  Enum['5', '6'] $major_version                                       = '5',
   Boolean $manage_repo                                                = true,
   String $package_ensure                                              = 'present',
   Optional[Tuple[Hash]] $processors                                   = undef,

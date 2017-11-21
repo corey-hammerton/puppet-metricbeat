@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Parameter `queue_size` has been removed.
 
 **Added**
+- Parameter `major_version` to configure 6.x versions of vendor repositories
 
 **Fixes**
 

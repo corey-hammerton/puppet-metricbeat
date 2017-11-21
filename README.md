@@ -103,6 +103,21 @@ class{'metricbeat':
 Please review the [elastic documentation](https://www.elastic.co/guide/en/beats/metricbeat/current/index.html) for configuration options
 and service compatability.
 
+### Upgrade to 6.0
+
+Version 0.2.0 of this module supports Metricbeat 6.0. Please review the [Metricbeat Changelog](https://www.elastic.co/guide/en/beats/libbeat/6.0/release-notes-6.0.0.html)
+for a full list of software changes and the module changelog for a list of module updates.
+
+To upgrade existing installations:
+
+```puppet
+class{'metricbeat':
+  'major_version'  => '6',
+  'package_ensure' => 'latest',
+  ...
+}
+```
+
 ### Processors
 
 
