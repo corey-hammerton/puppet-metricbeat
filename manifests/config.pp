@@ -14,7 +14,6 @@ class metricbeat::config inherits metricbeat {
     'fields'            => $metricbeat::fields,
     'fields_under_root' => $metricbeat::fields_under_root,
     'tags'              => $metricbeat::tags,
-    'queue_size'        => $metricbeat::queue_size,
     'logging'           => $metricbeat::logging,
     'processors'        => $metricbeat::processors,
     'metricbeat'        => {

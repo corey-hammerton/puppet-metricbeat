@@ -71,10 +71,6 @@
 # processors, provided by libbeat, to process events before they are
 # sent to the output. (default: undef)
 #
-# * `queue_size`
-# [Integer] The size of the internal queue for single events in the
-# processing pipeline. (default: 1000)
-#
 # * `service_ensure`
 # [String] The desirec state of Service['metricbeat']. Only valid when
 # $ensure is present. Valid values are 'enabled', 'disabled', 'running'
@@ -116,7 +112,6 @@ class metricbeat(
   Boolean $manage_repo                                                = true,
   String $package_ensure                                              = 'present',
   Optional[Tuple[Hash]] $processors                                   = undef,
-  Integer $queue_size                                                 = 1000,
   Enum['enabled', 'disabled', 'running', 'unmanaged'] $service_ensure = 'enabled',
   Boolean $service_has_restart                                        = true,
   Optional[Array[String]] $tags                                       = undef,
