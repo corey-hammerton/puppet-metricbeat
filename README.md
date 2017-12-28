@@ -103,6 +103,21 @@ class{'metricbeat':
 Please review the [elastic documentation](https://www.elastic.co/guide/en/beats/metricbeat/current/index.html) for configuration options
 and service compatability.
 
+### Upgrade to 6.0
+
+Version 0.2.0 of this module supports Metricbeat 6.0. Please review the [Metricbeat Changelog](https://www.elastic.co/guide/en/beats/libbeat/6.0/release-notes-6.0.0.html)
+for a full list of software changes and the module changelog for a list of module updates.
+
+To upgrade existing installations:
+
+```puppet
+class{'metricbeat':
+  'major_version'  => '6',
+  'package_ensure' => 'latest',
+  ...
+}
+```
+
 ### Processors
 
 
@@ -180,8 +195,10 @@ Installs and configures metricbeat.
   applicable if `ensure` is 'present'. (default: 'present')
 - `processors`: [Array[Hash]] Add processors to the configuration to run on data
   before sending to the output. (default: undef)
+- `queue`: [Hash] Configure the internal queue in packetbeat before being consumed
+  by the output(s) in 6.x versions.
 - `queue_size`: [Integer] The queue size for single events in the processing
-  pipeline. (default: 1000)
+  pipeline. This is only applicable if `major_version` is '5'. (default: 1000)
 - `service_ensure`: [String] Determine the state of the metricbeat service. Must
   be one of 'enabled', 'disabled', 'running', 'unmanaged'. (default: enabled)
 - `service_has_restart`: [Boolean] When true the Service resource issues the

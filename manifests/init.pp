@@ -58,6 +58,10 @@
 # [Hash] The configuration section of File['metricbeat.yml'] for the
 # logging output. 
 #
+# * `major_version`
+# [Enum] The major version of Metricbeat to install from vendor repositories.
+# Valid values are '5' and '6'. (default: '5')
+#
 # * `manage_repo`
 # [Boolean] Weather the upstream (elastic) repository should be
 # configured. (default: true)
@@ -71,9 +75,15 @@
 # processors, provided by libbeat, to process events before they are
 # sent to the output. (default: undef)
 #
+# * `queue`
+# [Hash] Configure the internal queue before being consumed by the output(s)
+# in bulk transactions. As of 6.0 only a memory queue is available, all
+# settings must be configured by example: { 'mem' => {...}}.
+#
 # * `queue_size`
 # [Integer] The size of the internal queue for single events in the
-# processing pipeline. (default: 1000)
+# processing pipeline. This is only applicable if $major_version is '5'.
+# (default: 1000)
 #
 # * `service_ensure`
 # [String] The desirec state of Service['metricbeat']. Only valid when
@@ -113,9 +123,19 @@ class metricbeat(
     'to_files'  => true,
     'to_syslog' => false,
   },
+  Enum['5', '6'] $major_version                                       = '5',
   Boolean $manage_repo                                                = true,
   String $package_ensure                                              = 'present',
   Optional[Tuple[Hash]] $processors                                   = undef,
+  Hash $queue                                                         = {
+    'mem' => {
+      'events' => 4096,
+      'flush'  => {
+        'min_events' => 0,
+        'timeout'    => '0s',
+      },
+    },
+  },
   Integer $queue_size                                                 = 1000,
   Enum['enabled', 'disabled', 'running', 'unmanaged'] $service_ensure = 'enabled',
   Boolean $service_has_restart                                        = true,

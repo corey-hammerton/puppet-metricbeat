@@ -9,19 +9,37 @@ class metricbeat::config inherits metricbeat {
     true    => undef,
     default => '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
   }
-  $metricbeat_config = delete_undef_values({
-    'name'              => $metricbeat::beat_name,
-    'fields'            => $metricbeat::fields,
-    'fields_under_root' => $metricbeat::fields_under_root,
-    'tags'              => $metricbeat::tags,
-    'queue_size'        => $metricbeat::queue_size,
-    'logging'           => $metricbeat::logging,
-    'processors'        => $metricbeat::processors,
-    'metricbeat'        => {
-      'modules'           => $metricbeat::modules,
-    },
-    'output'            => $metricbeat::outputs,
-  })
+
+  if $metricbeat::major_version == '5' {
+    $metricbeat_config = delete_undef_values({
+      'name'              => $metricbeat::beat_name,
+      'fields'            => $metricbeat::fields,
+      'fields_under_root' => $metricbeat::fields_under_root,
+      'tags'              => $metricbeat::tags,
+      'logging'           => $metricbeat::logging,
+      'processors'        => $metricbeat::processors,
+      'queue_size'        => $metricbeat::queue_size,
+      'metricbeat'        => {
+        'modules'           => $metricbeat::modules,
+      },
+      'output'            => $metricbeat::outputs,
+    })
+  }
+  elsif $metricbeat::major_version == '6' {
+    $metricbeat_config = delete_undef_values({
+      'name'              => $metricbeat::beat_name,
+      'fields'            => $metricbeat::fields,
+      'fields_under_root' => $metricbeat::fields_under_root,
+      'tags'              => $metricbeat::tags,
+      'logging'           => $metricbeat::logging,
+      'processors'        => $metricbeat::processors,
+      'queue'             => $metricbeat::queue,
+      'metricbeat'        => {
+        'modules'           => $metricbeat::modules,
+      },
+      'output'            => $metricbeat::outputs,
+    })
+  }
 
   file{'metricbeat.yml':
     ensure       => $metricbeat::ensure,
