@@ -285,12 +285,6 @@ describe 'metricbeat' do
 
         it { is_expected.to raise_error(Puppet::Error) }
       end
-
-      context 'with queue_size defined' do
-        let(:params) { { 'queue_size' => 1000 } }
-
-        it { is_expected.to raise_error(Puppet::Error) }
-      end
     end
   end
 end

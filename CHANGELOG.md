@@ -5,10 +5,10 @@ All notable changes to this project will be documented in this file.
 ## Release 0.2.0
 
 **Breaking**
-- Parameter `queue_size` has been removed.
 
 **Added**
 - Parameter `major_version` to configure 6.x versions of vendor repositories
+-- Parameter `queue_size` applies only if `major_version` == '5'
 
 **Fixes**
 

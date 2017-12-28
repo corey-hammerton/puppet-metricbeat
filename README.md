@@ -195,6 +195,8 @@ Installs and configures metricbeat.
   applicable if `ensure` is 'present'. (default: 'present')
 - `processors`: [Array[Hash]] Add processors to the configuration to run on data
   before sending to the output. (default: undef)
+- `queue_size`: [Integer] The queue size for single events in the processing
+  pipeline. This is only applicable if `major_version` is '5'. (default: 1000)
 - `service_ensure`: [String] Determine the state of the metricbeat service. Must
   be one of 'enabled', 'disabled', 'running', 'unmanaged'. (default: enabled)
 - `service_has_restart`: [Boolean] When true the Service resource issues the
