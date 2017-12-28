@@ -33,6 +33,7 @@ class metricbeat::config inherits metricbeat {
       'tags'              => $metricbeat::tags,
       'logging'           => $metricbeat::logging,
       'processors'        => $metricbeat::processors,
+      'queue'             => $metricbeat::queue,
       'metricbeat'        => {
         'modules'           => $metricbeat::modules,
       },

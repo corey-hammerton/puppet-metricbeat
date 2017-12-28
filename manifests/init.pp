@@ -75,6 +75,11 @@
 # processors, provided by libbeat, to process events before they are
 # sent to the output. (default: undef)
 #
+# * `queue`
+# [Hash] Configure the internal queue before being consumed by the output(s)
+# in bulk transactions. As of 6.0 only a memory queue is available, all
+# settings must be configured by example: { 'mem' => {...}}.
+#
 # * `queue_size`
 # [Integer] The size of the internal queue for single events in the
 # processing pipeline. This is only applicable if $major_version is '5'.
@@ -122,6 +127,15 @@ class metricbeat(
   Boolean $manage_repo                                                = true,
   String $package_ensure                                              = 'present',
   Optional[Tuple[Hash]] $processors                                   = undef,
+  Hash $queue                                                         = {
+    'mem' => {
+      'events' => 4096,
+      'flush'  => {
+        'min_events' => 0,
+        'timeout'    => '0s',
+      },
+    },
+  },
   Integer $queue_size                                                 = 1000,
   Enum['enabled', 'disabled', 'running', 'unmanaged'] $service_ensure = 'enabled',
   Boolean $service_has_restart                                        = true,

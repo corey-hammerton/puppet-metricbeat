@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 **Added**
 - Parameter `major_version` to configure 6.x versions of vendor repositories
 -- Parameter `queue_size` applies only if `major_version` == '5'
+Parameter `queue` to configure the internal queue in 6.x versions
 
 **Fixes**
 
