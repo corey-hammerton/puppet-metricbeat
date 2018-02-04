@@ -173,7 +173,7 @@ Please review the [documentation](https://www.elastic.co/guide/en/beats/metricbe
 Installs and configures metricbeat.
 
 **Parameters within `metricbeat`**
-- `modules`: [Tuple[Hash]] The required metricbeat.modules section of the configuration.
+- `modules`: [Array[Hash]] The required metricbeat.modules section of the configuration.
 - `outputs`: [Hash] The required output section of the configuration.
 - `beat_name`: [String] The name of the beat shipper (default: hostname)
 - `ensure`: [String] Valid values are 'present' and 'absent'. Determines weather

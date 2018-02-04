@@ -285,6 +285,37 @@ describe 'metricbeat' do
 
         it { is_expected.to raise_error(Puppet::Error) }
       end
+
+      context 'with multiple modules' do
+        let(:params) do
+          {
+            'ensure'  => 'absent',
+            'modules' => [
+              { 'module' => 'system', 'metricsets' => %w[cpu memory], 'period' => '10s' },
+              { 'module' => 'apache', 'metricsets' => %w[status], 'period' => '10s', 'hosts' => ['http://127.0.0.1'] },
+            ],
+            'outputs' => { 'elasticsearch' => { 'hosts' => ['http://localhost:9200'] } },
+          }
+        end
+
+        it { is_expected.to compile }
+      end
+
+      context 'with multiple processors' do
+        let(:params) do
+          {
+            'ensure'     => 'absent',
+            'modules'    => [{ 'module' => 'system', 'metricsets' => %w[cpu memory], 'period' => '10s' }],
+            'outputs'    => { 'elasticsearch' => { 'hosts' => ['http://localhost:9200'] } },
+            'processors' => [
+              { 'add_cloud_metadata' => { 'timeout' => '3s' } },
+              { 'drop_fields' => { 'fields' => %w[field1 field2] } },
+            ],
+          }
+        end
+
+        it { is_expected.to compile }
+      end
     end
   end
 end
