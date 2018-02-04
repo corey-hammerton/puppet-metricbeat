@@ -25,7 +25,7 @@
 # ----------
 #
 # * `modules`
-# Tuple[Hash] The array of modules this instance of metricbeat will
+# Array[Hash] The array of modules this instance of metricbeat will
 # collect. (default: [{}])
 #
 # * `outputs`
@@ -71,7 +71,7 @@
 # $ensure is present. (default: 'present')
 #
 # * `processors`
-# Optional[Tuple[Hash]] An optional list of dictionaries to configure
+# Optional[Array[Hash]] An optional list of dictionaries to configure
 # processors, provided by libbeat, to process events before they are
 # sent to the output. (default: undef)
 #
@@ -100,7 +100,7 @@
 # `tag` field of each published transaction. This is useful for
 # identifying groups of servers by logical property. (default: undef)
 class metricbeat(
-  Tuple[Hash] $modules                                                = [{}],
+  Array[Hash] $modules                                                = [{}],
   Hash $outputs                                                       = {},
   String $beat_name                                                   = $::hostname,
   Boolean $disable_configtest                                         = false,
@@ -126,7 +126,7 @@ class metricbeat(
   Enum['5', '6'] $major_version                                       = '5',
   Boolean $manage_repo                                                = true,
   String $package_ensure                                              = 'present',
-  Optional[Tuple[Hash]] $processors                                   = undef,
+  Optional[Array[Hash]] $processors                                   = undef,
   Hash $queue                                                         = {
     'mem' => {
       'events' => 4096,
