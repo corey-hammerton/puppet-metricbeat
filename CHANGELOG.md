@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 Parameter `queue` to configure the internal queue in 6.x versions
 
 **Fixes**
+- Changing the `modules` and `processor` type from `Tuple[hash]` to `Array[Hash]` (#4)
 
 ## Release 0.1.0
 
