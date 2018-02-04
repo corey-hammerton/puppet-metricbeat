@@ -36,5 +36,4 @@ deploy:
     secure: "F1/erwdOski36aRBVKhXYuBDJQEmORfuyX//FC+7BGw80ZCwWbEbTDNcxn57eg93z09kWdSbHtnotZM5f/PowP2Eczt4FDnQmNAiC5i4EUtbq1Rmzbw+4Gp4Dn53+ikptxbFv7GZup+r1iZW/4fnxtzOfmB2bj2u373g5Kd84xT2zqHx+K74tCl8iDCtHunWVtazKUFwcHfwR8wxHuOt88QFcKG2BUJpbm2T72VumH0vEZICp2fBiN06F+JDSkOGw39zxgIMpkF/v7A2Oo5390wWWVeefxcwkrgNC5fFDiaT8BVNyT/oF9UGF9mZLvosJRq+imr+R5s1JAe8Qfqn8ZrCWvbVEhBuUfG02yWqAv+GLyUKPa4kR+xrPTHQdSUQnOJlg5/6j/VTS0u0CUOVdSckICSCloo+R306sOWHo4YBtliC28jKOxe9eH3rCtUzbW9AbBZSH9Gzi0TS43g7F+jkf0CJixV/Bz+QC/N+GKHX3cMCZ51BmzBrEr73XUK16EgqbuYfhaUIp/CdlijYGDlX19DDsbVDeOHyg9KGLA30E7udWMErJ+GX7bctWsAeWZFUlcpypb18Zb5m69wuhKYjLWvkNW3+Wwb1xl54Gw04/rFidUpFpo9FMquDQAdc65ZjZWN/9uA0tmVC2NI3RoiXtdiiViMl/q9LUizQOzU="
   on:
     tags: true
-    all_branches: true
-    condition: "$DEPLOY_TO_FORGE = yes"
+    branch: master
