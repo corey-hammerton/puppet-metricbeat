@@ -7,7 +7,7 @@
 class metricbeat::config inherits metricbeat {
   $validate_cmd      = $metricbeat::disable_configtest ? {
     true    => undef,
-    default => '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
+    default => '/usr/share/metricbeat/bin/metricbeat -test -c %',
   }
 
   if $metricbeat::major_version == '5' {
