@@ -38,6 +38,7 @@ class metricbeat::config inherits metricbeat {
         'modules'           => $metricbeat::modules,
       },
       'output'            => $metricbeat::outputs,
+      'xpack'             => $metricbeat::xpack,
     })
   }
 
