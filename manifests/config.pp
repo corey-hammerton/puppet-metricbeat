@@ -26,7 +26,7 @@ class metricbeat::config inherits metricbeat {
     })
   }
   elsif $metricbeat::major_version == '6' {
-    $metricbeat_config = delete_undef_values({
+    $metricbeat_config_temp = delete_undef_values({
       'name'              => $metricbeat::beat_name,
       'fields'            => $metricbeat::fields,
       'fields_under_root' => $metricbeat::fields_under_root,
@@ -38,8 +38,13 @@ class metricbeat::config inherits metricbeat {
         'modules'           => $metricbeat::modules,
       },
       'output'            => $metricbeat::outputs,
-      'xpack'             => $metricbeat::xpack,
     })
+    if (versioncmp('6.3.0', $metricbeat::package_ensure) >= 0) or ($metricbeat::package_ensure == 'latest') {
+      $metricbeat_config = deep_merge($metricbeat_config_temp, {'xpack' => $metricbeat::xpack})
+    }
+    else {
+      $metricbeat_config = $metricbeat_config_temp
+    }
   }
 
   file{'metricbeat.yml':
