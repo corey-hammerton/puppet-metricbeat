@@ -39,11 +39,17 @@ class metricbeat::config inherits metricbeat {
       },
       'output'            => $metricbeat::outputs,
     })
-    if (versioncmp('6.3.0', $metricbeat::package_ensure) >= 0) or ($metricbeat::package_ensure == 'latest') {
-      $metricbeat_config = deep_merge($metricbeat_config_temp, {'xpack' => $metricbeat::xpack})
-    }
-    else {
-      $metricbeat_config = $metricbeat_config_temp
+    case $metricbeat::package_ensure {
+      'latest': { $metricbeat_config = deep_merge($metricbeat_config_temp, {'xpack' => $metricbeat::xpack}) }
+      /^\w+$/:  { $metricbeat_config = $metricbeat_config_temp }
+      default:  {
+        if versioncmp($metricbeat::package_ensure, '6.3.0') >= 0 {
+          $metricbeat_config = deep_merge($metricbeat_config_temp, {'xpack' => $metricbeat::xpack})
+        }
+        else {
+          $metricbeat_config = $metricbeat_config_temp
+        }
+      }
     }
   }
 
