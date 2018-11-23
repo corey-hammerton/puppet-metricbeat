@@ -99,6 +99,10 @@
 # Optional[Array[String]] An optional list of values to include in the 
 # `tag` field of each published transaction. This is useful for
 # identifying groups of servers by logical property. (default: undef)
+#
+# * `xpack`
+# Optional[Hash] Configuration items to export internal stats to a
+# monitoring Elasticsearch cluster
 class metricbeat(
   Array[Hash] $modules                                                = [{}],
   Hash $outputs                                                       = {},
@@ -140,6 +144,7 @@ class metricbeat(
   Enum['enabled', 'disabled', 'running', 'unmanaged'] $service_ensure = 'enabled',
   Boolean $service_has_restart                                        = true,
   Optional[Array[String]] $tags                                       = undef,
+  Optional[Hash] $xpack                                               = undef,
 ) {
   if $manage_repo {
     class{'metricbeat::repo':}
