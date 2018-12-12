@@ -5,11 +5,6 @@
 #
 # @summary Manages Metricbeat's configuration file
 class metricbeat::config inherits metricbeat {
-  $validate_cmd      = $metricbeat::disable_configtest ? {
-    true    => undef,
-    default => '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
-  }
-
   if $metricbeat::major_version == '5' {
     $metricbeat_config = delete_undef_values({
       'name'              => $metricbeat::beat_name,
@@ -24,6 +19,11 @@ class metricbeat::config inherits metricbeat {
       },
       'output'            => $metricbeat::outputs,
     })
+
+    $validate_cmd      = $metricbeat::disable_configtest ? {
+      true    => undef,
+      default => '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
+    }
   }
   elsif $metricbeat::major_version == '6' {
     $metricbeat_config_temp = delete_undef_values({
@@ -39,6 +39,12 @@ class metricbeat::config inherits metricbeat {
       },
       'output'            => $metricbeat::outputs,
     })
+    
+    $validate_cmd      = $metricbeat::disable_configtest ? {
+      true    => undef,
+      default => '/usr/share/metricbeat/bin/metricbeat test config',
+    }
+
     # Add the 'xpack' section if supported (version >= 6.2.0)
     if versioncmp($metricbeat::package_ensure, '6.2.0') >= 0 {
       $metricbeat_config = deep_merge($metricbeat_config_temp, {'xpack' => $metricbeat::xpack})
@@ -46,6 +52,7 @@ class metricbeat::config inherits metricbeat {
     else {
       $metricbeat_config = $metricbeat_config_temp
     }
+    
   }
 
   file{'metricbeat.yml':
