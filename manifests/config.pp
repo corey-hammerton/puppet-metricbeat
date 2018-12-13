@@ -39,7 +39,7 @@ class metricbeat::config inherits metricbeat {
       },
       'output'            => $metricbeat::outputs,
     })
-    
+
     $validate_cmd      = $metricbeat::disable_configtest ? {
       true    => undef,
       default => '/usr/share/metricbeat/bin/metricbeat test config',
@@ -52,7 +52,7 @@ class metricbeat::config inherits metricbeat {
     else {
       $metricbeat_config = $metricbeat_config_temp
     }
-    
+
   }
 
   file{'metricbeat.yml':
