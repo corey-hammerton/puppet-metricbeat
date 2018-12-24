@@ -245,7 +245,7 @@ describe 'metricbeat' do
       context 'with elasticsearch output' do
         let(:params) do
           {
-            'modules' => [{ 'module' => 'system', 'metricsets' => %w[cpu memory], 'period' => '10s' }],
+            'modules' => [{ 'module' => 'system', 'metricsets' => ['cpu', 'memory'], 'period' => '10s' }],
             'outputs' => { 'elasticsearch' => { 'hosts' => ['http://localhost:9200'] } },
           }
         end
@@ -261,7 +261,7 @@ describe 'metricbeat' do
         let(:params) do
           {
             'manage_repo' => false,
-            'modules'     => [{ 'module' => 'system', 'metricsets' => %w[cpu memory], 'period' => '10s' }],
+            'modules'     => [{ 'module' => 'system', 'metricsets' => ['cpu', 'memory'], 'period' => '10s' }],
             'outputs'     => { 'elasticsearch' => { 'hosts' => ['http://localhost:9200'] } },
           }
         end
@@ -277,7 +277,7 @@ describe 'metricbeat' do
         let(:params) do
           {
             'ensure'  => 'absent',
-            'modules' => [{ 'module' => 'system', 'metricsets' => %w[cpu memory], 'period' => '10s' }],
+            'modules' => [{ 'module' => 'system', 'metricsets' => ['cpu', 'memory'], 'period' => '10s' }],
             'outputs' => { 'elasticsearch' => { 'hosts' => ['http://localhost:9200'] } },
           }
         end
@@ -306,8 +306,8 @@ describe 'metricbeat' do
           {
             'ensure'  => 'absent',
             'modules' => [
-              { 'module' => 'system', 'metricsets' => %w[cpu memory], 'period' => '10s' },
-              { 'module' => 'apache', 'metricsets' => %w[status], 'period' => '10s', 'hosts' => ['http://127.0.0.1'] },
+              { 'module' => 'system', 'metricsets' => ['cpu', 'memory'], 'period' => '10s' },
+              { 'module' => 'apache', 'metricsets' => ['status'], 'period' => '10s', 'hosts' => ['http://127.0.0.1'] },
             ],
             'outputs' => { 'elasticsearch' => { 'hosts' => ['http://localhost:9200'] } },
           }
@@ -320,11 +320,11 @@ describe 'metricbeat' do
         let(:params) do
           {
             'ensure'     => 'absent',
-            'modules'    => [{ 'module' => 'system', 'metricsets' => %w[cpu memory], 'period' => '10s' }],
+            'modules'    => [{ 'module' => 'system', 'metricsets' => ['cpu', 'memory'], 'period' => '10s' }],
             'outputs'    => { 'elasticsearch' => { 'hosts' => ['http://localhost:9200'] } },
             'processors' => [
               { 'add_cloud_metadata' => { 'timeout' => '3s' } },
-              { 'drop_fields' => { 'fields' => %w[field1 field2] } },
+              { 'drop_fields' => { 'fields' => ['field1', 'field2'] } },
             ],
           }
         end
