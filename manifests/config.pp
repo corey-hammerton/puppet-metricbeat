@@ -26,7 +26,7 @@ class metricbeat::config inherits metricbeat {
     }
   }
   elsif $metricbeat::major_version == '6' {
-    $metricbeat_config = delete_undef_values({
+    $metricbeat_config_temp = delete_undef_values({
       'name'              => $metricbeat::beat_name,
       'fields'            => $metricbeat::fields,
       'fields_under_root' => $metricbeat::fields_under_root,
@@ -44,6 +44,15 @@ class metricbeat::config inherits metricbeat {
       true    => undef,
       default => '/usr/share/metricbeat/bin/metricbeat test config',
     }
+
+    # Add the 'xpack' section if supported (version >= 6.2.0)
+    if versioncmp($metricbeat::package_ensure, '6.2.0') >= 0 {
+      $metricbeat_config = deep_merge($metricbeat_config_temp, {'xpack' => $metricbeat::xpack})
+    }
+    else {
+      $metricbeat_config = $metricbeat_config_temp
+    }
+
   }
 
   file{'metricbeat.yml':
