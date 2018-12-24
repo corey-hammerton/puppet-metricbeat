@@ -75,7 +75,7 @@ describe 'metricbeat' do
               ensure: 'present',
               owner: 'root',
               group: 'root',
-              mode: '0644',
+              mode: '0600',
               path: '/etc/metricbeat/metricbeat.yml',
               validate_cmd: '/usr/share/metricbeat/bin/metricbeat test config',
             )
