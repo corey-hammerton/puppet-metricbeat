@@ -36,6 +36,10 @@
 # [String] The name of the beat which is published as the `beat.name`
 # field of each transaction. (default: $::hostname)
 #
+# * `config_mode`
+# [String] The file permission mode of the config file. Must be in Linux
+# octal format. Default: '0600'
+#
 # * `disable_configtest`
 # [Boolean] If true disable configuration file testing. It is generally
 # recommended to leave this parameter at its default value. (default: false)
@@ -103,6 +107,7 @@ class metricbeat(
   Array[Hash] $modules                                                = [{}],
   Hash $outputs                                                       = {},
   String $beat_name                                                   = $::hostname,
+  Pattern[/^0[0-7]{3}$/] $config_mode                                 = '0600',
   Boolean $disable_configtest                                         = false,
   Enum['present', 'absent'] $ensure                                   = 'present',
   Optional[Hash] $fields                                              = undef,

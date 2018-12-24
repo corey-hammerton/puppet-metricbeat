@@ -51,7 +51,7 @@ class metricbeat::config inherits metricbeat {
     path         => '/etc/metricbeat/metricbeat.yml',
     owner        => 'root',
     group        => 'root',
-    mode         => '0644',
+    mode         => $metricbeat::config_mode,
     content      => inline_template('<%= @metricbeat_config.to_yaml() %>'),
     validate_cmd => $validate_cmd,
   }

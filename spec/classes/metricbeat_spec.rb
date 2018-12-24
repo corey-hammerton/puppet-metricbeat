@@ -13,7 +13,7 @@ describe 'metricbeat' do
             ensure: 'present',
             owner: 'root',
             group: 'root',
-            mode: '0644',
+            mode: '0600',
             path: '/etc/metricbeat/metricbeat.yml',
             validate_cmd: '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
           )
@@ -39,11 +39,32 @@ describe 'metricbeat' do
               ensure: 'present',
               owner: 'root',
               group: 'root',
-              mode: '0644',
+              mode: '0600',
               path: '/etc/metricbeat/metricbeat.yml',
               validate_cmd: nil,
             )
           end
+        end
+
+        describe 'with config_mode = 0644' do
+          let(:params) { { 'config_mode' => '0644' } }
+
+          it do
+            is_expected.to contain_file('metricbeat.yml').with(
+              ensure: 'present',
+              owner: 'root',
+              group: 'root',
+              mode: '0644',
+              path: '/etc/metricbeat/metricbeat.yml',
+              validate_cmd: '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
+            )
+          end
+        end
+
+        describe 'with config_mode = 9999' do
+          let(:params) { { 'config_mode' => '9999' } }
+
+          it { is_expected.to raise_error(Puppet::Error) }
         end
 
         describe 'with major_version = 6 for new config test flag' do
@@ -54,7 +75,7 @@ describe 'metricbeat' do
               ensure: 'present',
               owner: 'root',
               group: 'root',
-              mode: '0644',
+              mode: '0600',
               path: '/etc/metricbeat/metricbeat.yml',
               validate_cmd: '/usr/share/metricbeat/bin/metricbeat test config',
             )
