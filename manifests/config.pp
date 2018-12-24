@@ -5,11 +5,6 @@
 #
 # @summary Manages Metricbeat's configuration file
 class metricbeat::config inherits metricbeat {
-  $validate_cmd      = $metricbeat::disable_configtest ? {
-    true    => undef,
-    default => '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
-  }
-
   if $metricbeat::major_version == '5' {
     $metricbeat_config = delete_undef_values({
       'name'              => $metricbeat::beat_name,
@@ -24,6 +19,11 @@ class metricbeat::config inherits metricbeat {
       },
       'output'            => $metricbeat::outputs,
     })
+
+    $validate_cmd      = $metricbeat::disable_configtest ? {
+      true    => undef,
+      default => '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
+    }
   }
   elsif $metricbeat::major_version == '6' {
     $metricbeat_config = delete_undef_values({
@@ -39,6 +39,11 @@ class metricbeat::config inherits metricbeat {
       },
       'output'            => $metricbeat::outputs,
     })
+
+    $validate_cmd      = $metricbeat::disable_configtest ? {
+      true    => undef,
+      default => '/usr/share/metricbeat/bin/metricbeat test config',
+    }
   }
 
   file{'metricbeat.yml':

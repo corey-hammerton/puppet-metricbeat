@@ -66,6 +66,21 @@ describe 'metricbeat' do
 
           it { is_expected.to raise_error(Puppet::Error) }
         end
+
+        describe 'with major_version = 6 for new config test flag' do
+          let(:params) { { 'major_version' => '6' } }
+
+          it do
+            is_expected.to contain_file('metricbeat.yml').with(
+              ensure: 'present',
+              owner: 'root',
+              group: 'root',
+              mode: '0644',
+              path: '/etc/metricbeat/metricbeat.yml',
+              validate_cmd: '/usr/share/metricbeat/bin/metricbeat test config',
+            )
+          end
+        end
       end
 
       describe 'metricbeat::install' do
