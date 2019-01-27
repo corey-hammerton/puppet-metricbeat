@@ -108,49 +108,26 @@
 # Optional[Hash] Configuration items to export internal stats to a
 # monitoring Elasticsearch cluster
 class metricbeat(
-  Array[Hash] $modules                                                = [{}],
-  Hash $outputs                                                       = {},
-  String $beat_name                                                   = $::hostname,
-  Pattern[/^0[0-7]{3}$/] $config_mode                                 = '0600',
-  Boolean $disable_configtest                                         = false,
-  Enum['present', 'absent'] $ensure                                   = 'present',
-  Optional[Hash] $fields                                              = undef,
-  Boolean $fields_under_root                                          = false,
-  Hash $logging                                                       = {
-    'level'     => 'info',
-    'files'     => {
-      'keepfiles'        => 7,
-      'name'             => 'metricbeat',
-      'path'             => '/var/log/metricbeat',
-      'rotateeverybytes' => '10485760',
-    },
-    'metrics'   => {
-      'enabled' => false,
-      'period'  => '30s',
-    },
-    'selectors' => undef,
-    'to_files'  => true,
-    'to_syslog' => false,
-  },
-  Enum['5', '6'] $major_version                                       = '5',
-  Boolean $manage_repo                                                = true,
-  String $package_ensure                                              = 'present',
-  Optional[Array[Hash]] $processors                                   = undef,
-  Hash $queue                                                         = {
-    'mem' => {
-      'events' => 4096,
-      'flush'  => {
-        'min_events' => 0,
-        'timeout'    => '0s',
-      },
-    },
-  },
-  Integer $queue_size                                                 = 1000,
-  Enum['enabled', 'disabled', 'running', 'unmanaged'] $service_ensure = 'enabled',
-  Boolean $service_has_restart                                        = true,
-  Optional[Array[String]] $tags                                       = undef,
-  Optional[Hash] $xpack                                               = undef,
-) {
+  Array[Hash] $modules                                                = $metricbeat::params::modules,
+  Hash $outputs                                                       = $metricbeat::params::outputs,
+  String $beat_name                                                   = $metricbeat::params::beat_name,
+  Pattern[/^0[0-7]{3}$/] $config_mode                                 = $metricbeat::params::config_mode,
+  Boolean $disable_configtest                                         = $metricbeat::params::disable_configtest,
+  Enum['present', 'absent'] $ensure                                   = $metricbeat::params::ensure,
+  Optional[Hash] $fields                                              = $metricbeat::params::fields,
+  Boolean $fields_under_root                                          = $metricbeat::params::fields_under_root,
+  Hash $logging                                                       = $metricbeat::params::logging,
+  Enum['5', '6'] $major_version                                       = $metricbeat::params::major_version,
+  Boolean $manage_repo                                                = $metricbeat::params::manage_repo,
+  String $package_ensure                                              = $metricbeat::params::package_ensure,
+  Optional[Array[Hash]] $processors                                   = $metricbeat::params::processors,
+  Hash $queue                                                         = $metricbeat::params::queue,
+  Integer $queue_size                                                 = $metricbeat::params::queue_size,
+  Enum['enabled', 'disabled', 'running', 'unmanaged'] $service_ensure = $metricbeat::params::service_ensure,
+  Boolean $service_has_restart                                        = $metricbeat::params::service_has_restart,
+  Optional[Array[String]] $tags                                       = $metricbeat::params::tags,
+  Optional[Hash] $xpack                                               = $metricbeat::params::xpack,
+) inherits metricbeat::params {
   if $manage_repo {
     class{'metricbeat::repo':}
 
