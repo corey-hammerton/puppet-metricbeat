@@ -5,18 +5,16 @@
 #
 # @summary Manages the relevant repo manager on the target node.
 class metricbeat::repo inherits metricbeat {
+  $apt_repo_url = "https://artifacts.elastic.co/packages/${metricbeat::major_version}.x/apt"
+  $yum_repo_url = "https://artifacts.elastic.co/packages/${metricbeat::major_version}.x/yum"
+
   case $facts['osfamily'] {
     'Debian': {
       include ::apt
 
-      $download_url = $metricbeat::major_version ? {
-        '5' => 'https://artifacts.elastic.co/packages/5.x/apt',
-        '6' => 'https://artifacts.elastic.co/packages/6.x/apt',
-      }
-
       if !defined(Apt::Source['beats']) {
         apt::source{'beats':
-          location => $download_url,
+          location => $apt_repo_url,
           release  => 'stable',
           repos    => 'main',
           key      => {
@@ -27,16 +25,10 @@ class metricbeat::repo inherits metricbeat {
       }
     }
     'RedHat': {
-
-      $download_url = $metricbeat::major_version ? {
-        '5' => 'https://artifacts.elastic.co/packages/5.x/yum',
-        '6' => 'https://artifacts.elastic.co/packages/6.x/yum',
-      }
-
       if !defined(Yumrepo['beats']) {
         yumrepo{'beats':
-          descr    => 'Elastic repository for 5.x packages',
-          baseurl  => $download_url,
+          descr    => "Elastic repository for ${metricbeat::major_version}.x packages",
+          baseurl  => $yum_repo_url,
           gpgcheck => 1,
           gpgkey   => 'https://artifacts.elastic.co/GPG-KEY-elasticsearch',
           enabled  => 1,
@@ -44,12 +36,6 @@ class metricbeat::repo inherits metricbeat {
       }
     }
     'SuSe': {
-
-      $download_url = $metricbeat::major_version ? {
-        '5' => 'https://artifacts.elastic.co/packages/5.x/yum',
-        '6' => 'https://artifacts.elastic.co/packages/6.x/yum',
-      }
-
       exec { 'topbeat_suse_import_gpg':
         command => '/usr/bin/rpmkeys --import https://artifacts.elastic.co/GPG-KEY-elasticsearch',
         unless  => '/usr/bin/test $(rpm -qa gpg-pubkey | grep -i "D88E42B4" | wc -l) -eq 1 ',
@@ -57,7 +43,7 @@ class metricbeat::repo inherits metricbeat {
       }
       if !defined (Zypprepo['beats']) {
         zypprepo{'beats':
-          baseurl     => $download_url,
+          baseurl     => $yum_repo_url,
           enabled     => 1,
           autorefresh => 1,
           name        => 'beats',
