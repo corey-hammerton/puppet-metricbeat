@@ -19,11 +19,6 @@ class metricbeat::config inherits metricbeat {
       },
       'output'            => $metricbeat::outputs,
     })
-
-    $validate_cmd      = $metricbeat::disable_configtest ? {
-      true    => undef,
-      default => '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
-    }
   }
   elsif $metricbeat::major_version == '6' {
     $metricbeat_config_temp = delete_undef_values({
@@ -40,11 +35,6 @@ class metricbeat::config inherits metricbeat {
       'output'            => $metricbeat::outputs,
     })
 
-    $validate_cmd      = $metricbeat::disable_configtest ? {
-      true    => undef,
-      default => '/usr/share/metricbeat/bin/metricbeat test config',
-    }
-
     # Add the 'xpack' section if supported (version >= 6.2.0)
     if versioncmp($metricbeat::package_ensure, '6.2.0') >= 0 {
       $metricbeat_config = deep_merge($metricbeat_config_temp, {'xpack' => $metricbeat::xpack})
@@ -55,13 +45,43 @@ class metricbeat::config inherits metricbeat {
 
   }
 
-  file{'metricbeat.yml':
-    ensure       => $metricbeat::ensure,
-    path         => '/etc/metricbeat/metricbeat.yml',
-    owner        => 'root',
-    group        => 'root',
-    mode         => $metricbeat::config_mode,
-    content      => inline_template('<%= @metricbeat_config.to_yaml() %>'),
-    validate_cmd => $validate_cmd,
+  case $::kernel {
+    'Linux': {
+      $validate_cmd = $metricbeat::disable_configtest ? {
+        true    => undef,
+        default => $metricbeat::major_version ? {
+          '5'     => '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
+          default => '/usr/share/metricbeat/bin/metricbeat test config',
+        }
+      }
+
+      file{'metricbeat.yml':
+        ensure       => $metricbeat::ensure,
+        path         => $metricbeat::config_file,
+        owner        => 'root',
+        group        => 'root',
+        mode         => $metricbeat::config_mode,
+        content      => inline_template('<%= @metricbeat_config.to_yaml() %>'),
+        validate_cmd => $validate_cmd,
+      }
+    }
+    'Windows': {
+      $cmd_install_dir = regsubst($metricbeat::install_dir, '/', '\\', 'G')
+      $metricbeat_path = join([$cmd_install_dir, 'Metricbeat', 'metricbeat.exe'], '\\')
+      $validate_cmd    = $metricbeat::disable_configtest ? {
+        true    => undef,
+        default => "\"${metricbeat_path}\" -N configtest -c \"%\""
+      }
+
+      file{'metricbeat.yml':
+        ensure       => $metricbeat::ensure,
+        path         => $metricbeat::config_file,
+        content      => inline_template('<%= @metricbeat_config.to_yaml() %>'),
+        validate_cmd => $validate_cmd,
+      }
+    }
+    default: {
+      fail("${::kernel} is not supported by metricbeat.")
+    }
   }
 }
