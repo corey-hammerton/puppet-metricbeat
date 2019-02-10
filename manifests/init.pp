@@ -154,8 +154,7 @@ class metricbeat(
   if $manage_repo {
     class{'metricbeat::repo':}
 
-    Anchor['metricbeat::begin']
-    -> Class['metricbeat::repo']
+    Class['metricbeat::repo']
     -> Class['metricbeat::install']
   }
 
