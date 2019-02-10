@@ -5,6 +5,6 @@ fixtures:
   forge_modules:
     apt: "puppetlabs/apt"
     stdlib: "puppetlabs/stdlib"
-    zypprepo: "darin/zypprepo"
+    zypprepo: "puppet/zypprepo"
   symlinks:
     metricbeat: "#{source_dir}"
