@@ -6,10 +6,10 @@
 # @summary Manages the state of Package['metricbeat']
 class metricbeat::install inherits metricbeat {
   if $::kernel == 'Windows' {
-    $filename       = regsubst($filebeat::real_download_url, '^https?.*\/([^\/]+)\.[^.].*', '\1')
+    $filename       = regsubst($metricbeat::real_download_url, '^https?.*\/([^\/]+)\.[^.].*', '\1')
     $foldername     = 'Filebeat'
-    $zip_file       = join([$filebeat::tmp_dir, "${filename}.zip"], '/')
-    $install_folder = join([$filebeat::install_dir, $foldername], '/')
+    $zip_file       = join([$metricbeat::tmp_dir, "${filename}.zip"], '/')
+    $install_folder = join([$metricbeat::install_dir, $foldername], '/')
     $version_file   = join([$install_folder, $filename], '/')
 
     Exec {
@@ -29,10 +29,10 @@ class metricbeat::install inherits metricbeat {
       proxy_server => $metricbeat::proxy_address,
     }
     exec{"unzip ${filename}":
-      command => "\$sh=New-Object -COM Shell.Application;\$sh.namespace((Convert-Path '${filebeat::install_dir}')).Copyhere(\$sh.namespace((Convert-Path '${zip_file}')).items(), 16)", # lint:ignore:140chars
+      command => "\$sh=New-Object -COM Shell.Application;\$sh.namespace((Convert-Path '${metricbeat::install_dir}')).Copyhere(\$sh.namespace((Convert-Path '${zip_file}')).items(), 16)", # lint:ignore:140chars
       creates => $version_file,
       require => [
-        File[$filebeat::install_dir],
+        File[$metricbeat::install_dir],
         Archive[$zip_file],
       ],
     }
@@ -63,7 +63,7 @@ class metricbeat::install inherits metricbeat {
     }
     exec{"install ${filename}":
       cwd         => $install_folder,
-      command     => './install-service-filebeat.ps1',
+      command     => './install-service-metricbeat.ps1',
       refreshonly => true,
       subscribe   => Exec["mark ${filename}"],
     }

@@ -8,32 +8,7 @@ describe 'metricbeat' do
       it { is_expected.to compile }
 
       describe 'metricbeat::config' do
-        it do
-          is_expected.to contain_file('metricbeat.yml').with(
-            ensure: 'present',
-            owner: 'root',
-            group: 'root',
-            mode: '0600',
-            path: '/etc/metricbeat/metricbeat.yml',
-            validate_cmd: '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
-          )
-        end
-
-        describe 'with ensure = absent' do
-          let(:params) { { 'ensure' => 'absent' } }
-
-          it do
-            is_expected.to contain_file('metricbeat.yml').with(
-              ensure: 'absent',
-              path: '/etc/metricbeat/metricbeat.yml',
-              validate_cmd: '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
-            )
-          end
-        end
-
-        describe 'with disable_configtest = true' do
-          let(:params) { { 'disable_configtest' => true } }
-
+        if os_facts[:kernel] != 'windows'
           it do
             is_expected.to contain_file('metricbeat.yml').with(
               ensure: 'present',
@@ -41,23 +16,56 @@ describe 'metricbeat' do
               group: 'root',
               mode: '0600',
               path: '/etc/metricbeat/metricbeat.yml',
-              validate_cmd: nil,
+              validate_cmd: '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
             )
+          end
+        end
+
+        describe 'with ensure = absent' do
+          let(:params) { { 'ensure' => 'absent' } }
+
+          if os_facts[:kernel] != 'windows'
+            it do
+              is_expected.to contain_file('metricbeat.yml').with(
+                ensure: 'absent',
+                path: '/etc/metricbeat/metricbeat.yml',
+                validate_cmd: '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
+              )
+            end
+          end
+        end
+
+        describe 'with disable_configtest = true' do
+          let(:params) { { 'disable_configtest' => true } }
+
+          if os_facts[:kernel] != 'windows'
+            it do
+              is_expected.to contain_file('metricbeat.yml').with(
+                ensure: 'present',
+                owner: 'root',
+                group: 'root',
+                mode: '0600',
+                path: '/etc/metricbeat/metricbeat.yml',
+                validate_cmd: nil,
+              )
+            end
           end
         end
 
         describe 'with config_mode = 0644' do
           let(:params) { { 'config_mode' => '0644' } }
 
-          it do
-            is_expected.to contain_file('metricbeat.yml').with(
-              ensure: 'present',
-              owner: 'root',
-              group: 'root',
-              mode: '0644',
-              path: '/etc/metricbeat/metricbeat.yml',
-              validate_cmd: '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
-            )
+          if os_facts[:kernel] != 'windows'
+            it do
+              is_expected.to contain_file('metricbeat.yml').with(
+                ensure: 'present',
+                owner: 'root',
+                group: 'root',
+                mode: '0644',
+                path: '/etc/metricbeat/metricbeat.yml',
+                validate_cmd: '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
+              )
+            end
           end
         end
 
@@ -70,38 +78,48 @@ describe 'metricbeat' do
         describe 'with major_version = 6 for new config test flag' do
           let(:params) { { 'major_version' => '6' } }
 
-          it do
-            is_expected.to contain_file('metricbeat.yml').with(
-              ensure: 'present',
-              owner: 'root',
-              group: 'root',
-              mode: '0600',
-              path: '/etc/metricbeat/metricbeat.yml',
-              validate_cmd: '/usr/share/metricbeat/bin/metricbeat test config',
-            )
+          if os_facts[:kernel] != 'windows'
+            it do
+              is_expected.to contain_file('metricbeat.yml').with(
+                ensure: 'present',
+                owner: 'root',
+                group: 'root',
+                mode: '0600',
+                path: '/etc/metricbeat/metricbeat.yml',
+                validate_cmd: '/usr/share/metricbeat/bin/metricbeat test config',
+              )
+            end
           end
         end
       end
 
       describe 'metricbeat::install' do
-        it { is_expected.to contain_package('metricbeat').with(ensure: 'present') }
+        if os_facts[:kernel] != 'windows'
+          it { is_expected.to contain_package('metricbeat').with(ensure: 'present') }
+        end
 
         describe 'with ensure = absent' do
           let(:params) { { 'ensure' => 'absent' } }
 
-          it { is_expected.to contain_package('metricbeat').with(ensure: 'absent') }
+          if os_facts[:kernel] != 'windows'
+            it { is_expected.to contain_package('metricbeat').with(ensure: 'absent') }
+          end
         end
 
         describe 'with package_ensure to a specific version' do
           let(:params) { { 'package_ensure' => '5.6.2-1' } }
 
-          it { is_expected.to contain_package('metricbeat').with(ensure: '5.6.2-1') }
+          if os_facts[:kernel] != 'windows'
+            it { is_expected.to contain_package('metricbeat').with(ensure: '5.6.2-1') }
+          end
         end
 
         describe 'with package_ensure = latest' do
           let(:params) { { 'package_ensure' => 'latest' } }
 
-          it { is_expected.to contain_package('metricbeat').with(ensure: 'latest') }
+          if os_facts[:kernel] != 'windows'
+            it { is_expected.to contain_package('metricbeat').with(ensure: 'latest') }
+          end
         end
       end
 

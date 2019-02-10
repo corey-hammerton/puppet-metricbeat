@@ -4,6 +4,8 @@
 fixtures:
   forge_modules:
     apt: "puppetlabs/apt"
+    archive: "puppet/archive"
+    powershell: "puppetlabs/powershell"
     stdlib: "puppetlabs/stdlib"
     zypprepo: "darin/zypprepo"
   symlinks:

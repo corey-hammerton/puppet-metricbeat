@@ -38,14 +38,14 @@ class metricbeat::params {
       $config_file = '/etc/metricbeat/metricbeat.yml'
       $install_dir = undef
       $logging     = {
-        'level'     => 'info',
-        'files'     => {
+        'level' => 'info',
+        'files' => {
           'keepfiles'        => 7,
           'name'             => 'metricbeat',
           'path'             => '/var/log/metricbeat',
           'rotateeverybytes' => '10485760',
         },
-        'metrics'   => {
+        'metrics' => {
           'enabled' => false,
           'period'  => '30s',
         },
@@ -64,6 +64,22 @@ class metricbeat::params {
     'Windows': {
       $config_file      = 'C:/Program Files/Metricbeat/metricbeat.yml'
       $install_dir      = 'C:/Program Files'
+      $logging          = {
+        'level' => 'info',
+        'files' => {
+          'keepfiles'        => 7,
+          'name'             => 'metricbeat',
+          'path'             => 'C:/Program Files/Metricbeat/logs',
+          'rotateeverybytes' => '10485760',
+        },
+        'metrics' => {
+          'enabled' => false,
+          'period'  => '30s',
+        },
+        'selectors'   => undef,
+        'to_eventlog' => false,
+        'to_files'    => true,
+      }
       $package_ensure   = '5.6.2'
       $service_provider = undef
       $tmp_dir          = 'C:/Windows/Temp'
