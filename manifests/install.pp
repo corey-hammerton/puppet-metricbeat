@@ -7,7 +7,7 @@
 class metricbeat::install inherits metricbeat {
   if $::kernel == 'Windows' {
     $filename       = regsubst($metricbeat::real_download_url, '^https?.*\/([^\/]+)\.[^.].*', '\1')
-    $foldername     = 'Filebeat'
+    $foldername     = 'Metricbeat'
     $zip_file       = join([$metricbeat::tmp_dir, "${filename}.zip"], '/')
     $install_folder = join([$metricbeat::install_dir, $foldername], '/')
     $version_file   = join([$install_folder, $filename], '/')

@@ -70,7 +70,10 @@ class metricbeat::config inherits metricbeat {
       $metricbeat_path = join([$cmd_install_dir, 'Metricbeat', 'metricbeat.exe'], '\\')
       $validate_cmd    = $metricbeat::disable_configtest ? {
         true    => undef,
-        default => "\"${metricbeat_path}\" -N configtest -c \"%\""
+        default => $metricbeat::major_version ? {
+          '5' => "\"${metricbeat_path}\" -N configtest -c \"%\"",
+          default => "\"${metricbeat_path}\" test config",
+        }
       }
 
       file{'metricbeat.yml':
