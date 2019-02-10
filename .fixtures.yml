@@ -7,6 +7,6 @@ fixtures:
     archive: "puppet/archive"
     powershell: "puppetlabs/powershell"
     stdlib: "puppetlabs/stdlib"
-    zypprepo: "darin/zypprepo"
+    zypprepo: "puppet/zypprepo"
   symlinks:
     metricbeat: "#{source_dir}"
