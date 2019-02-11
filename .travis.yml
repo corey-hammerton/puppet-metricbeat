@@ -34,10 +34,9 @@ notifications:
   email: false
 deploy:
   provider: puppetforge
-  user: puppet
+  user: coreyh
   password:
-    secure: ""
+    secure: "mSHC0wTk0IncTm8O8JeFB/UThuEIgJ9lxn40Rb7h2ePv2N6ecPZzxu5rh8Q0dZXvzlLvlQJCYmxWOUPciwwGQZMw4kqevpZOjHdeh+Q3iHcZhvVKx4B546NYcJeNztGnTcIERV6JPQwjWA/DLkljNM8JtpVz1lfTYqkL50BtliKHfyjzNe+/VT9j8+eRbT9sNff+EvBRGnbL7Gb6aCgKa0+OUWf+nEzkER+hZYb3MmM0CA53Jh38p8scY2zJGAbY0ExauIJieElropexPx45fJ04vM9pqrWz434q2soZWgk0ffEamFNHXJh0h0DcTIhGZaibov7BXatmL+xXGAWyfwgOeLuBBuHgmRh1WvZlWPZMTcoN38hG5eqdNXJtf/UwTdQaFohyriWHrfqPOa9hCUbcyIpQQyrllGkGqxIxQ6dk3FQJEI7NivNZVZMnFPaZhXRpRALePuGR488N5kZoFvWKX5cRPaD/X60vILRAts4MElmy1HIzrU3tC+mtmunD8F/9SqQCEYAuR0PQvN6NyeewGWaTgiEiBnlK/zuU1XmHGgJOB+psV83SkKutIjAv5Qc6JH6YiAsRZC8DPSPawlbqDZmSFUi/HBK71XHSXY5pAwx/NT9SLuvrxsCCWCwvLeyY0wtn2D1ciZQ55HaanEo2cs6OZb7Y8GF7RQcCfgk="
   on:
     tags: true
     all_branches: true
-    condition: "$DEPLOY_TO_FORGE = yes"
