@@ -2,11 +2,12 @@
 # See https://github.com/puppetlabs/puppetlabs_spec_helper#using-fixtures for details
 ---
 fixtures:
-  forge_modules:
-    apt: "puppetlabs/apt"
-    archive: "puppet/archive"
-    powershell: "puppetlabs/powershell"
-    stdlib: "puppetlabs/stdlib"
-    zypprepo: "puppet/zypprepo"
+  repositories:
+    yumrepo_core:
+      repo: "https://github.com/puppetlabs/puppetlabs-yumrepo_core.git"
+      puppet_version: ">= 6.0.0"
+    apt: "https://github.com/puppetlabs/puppetlabs-apt.git"
+    stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
+    zypprepo: "https://github.com/voxpupuli/puppet-zypprepo.git"
   symlinks:
     metricbeat: "#{source_dir}"
