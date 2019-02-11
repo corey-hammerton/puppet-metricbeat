@@ -5,7 +5,7 @@ describe 'metricbeat' do
     context "on #{os}" do
       let(:facts) { os_facts }
 
-      # it { is_expected.to compile }
+      it { is_expected.to compile }
 
       describe 'metricbeat::config' do
         it do
@@ -271,7 +271,7 @@ describe 'metricbeat' do
           }
         end
 
-        # it { is_expected.to compile }
+        it { is_expected.to compile }
         it { is_expected.to contain_class('metricbeat::config').that_notifies('Class[metricbeat::service]') }
         it { is_expected.to contain_class('metricbeat::install').that_comes_before('Class[metricbeat::config]').that_notifies('Class[metricbeat::service]') }
         it { is_expected.to contain_class('metricbeat::repo').that_comes_before('Class[metricbeat::install]') }
@@ -287,7 +287,7 @@ describe 'metricbeat' do
           }
         end
 
-        # it { is_expected.to compile }
+        it { is_expected.to compile }
         it { is_expected.to contain_class('metricbeat::config').that_notifies('Class[metricbeat::service]') }
         it { is_expected.to contain_class('metricbeat::install').that_comes_before('Class[metricbeat::config]').that_notifies('Class[metricbeat::service]') }
         it { is_expected.not_to contain_class('metricbeat::repo') }
@@ -303,7 +303,7 @@ describe 'metricbeat' do
           }
         end
 
-        # it { is_expected.to compile }
+        it { is_expected.to compile }
         it { is_expected.to contain_class('metricbeat::config') }
         it { is_expected.to contain_class('metricbeat::install') }
         it { is_expected.to contain_class('metricbeat::repo').that_comes_before('Class[metricbeat::install]') }
@@ -322,36 +322,36 @@ describe 'metricbeat' do
         it { is_expected.to raise_error(Puppet::Error) }
       end
 
-      # context 'with multiple modules' do
-      #   let(:params) do
-      #     {
-      #       'ensure'  => 'absent',
-      #       'modules' => [
-      #         { 'module' => 'system', 'metricsets' => ['cpu', 'memory'], 'period' => '10s' },
-      #         { 'module' => 'apache', 'metricsets' => ['status'], 'period' => '10s', 'hosts' => ['http://127.0.0.1'] },
-      #       ],
-      #       'outputs' => { 'elasticsearch' => { 'hosts' => ['http://localhost:9200'] } },
-      #     }
-      #   end
+      context 'with multiple modules' do
+        let(:params) do
+          {
+            'ensure'  => 'absent',
+            'modules' => [
+              { 'module' => 'system', 'metricsets' => ['cpu', 'memory'], 'period' => '10s' },
+              { 'module' => 'apache', 'metricsets' => ['status'], 'period' => '10s', 'hosts' => ['http://127.0.0.1'] },
+            ],
+            'outputs' => { 'elasticsearch' => { 'hosts' => ['http://localhost:9200'] } },
+          }
+        end
 
-      #   it { is_expected.to compile }
-      # end
+        it { is_expected.to compile }
+      end
 
-      # context 'with multiple processors' do
-      #   let(:params) do
-      #     {
-      #       'ensure'     => 'absent',
-      #       'modules'    => [{ 'module' => 'system', 'metricsets' => ['cpu', 'memory'], 'period' => '10s' }],
-      #       'outputs'    => { 'elasticsearch' => { 'hosts' => ['http://localhost:9200'] } },
-      #       'processors' => [
-      #         { 'add_cloud_metadata' => { 'timeout' => '3s' } },
-      #         { 'drop_fields' => { 'fields' => ['field1', 'field2'] } },
-      #       ],
-      #     }
-      #   end
+      context 'with multiple processors' do
+        let(:params) do
+          {
+            'ensure'     => 'absent',
+            'modules'    => [{ 'module' => 'system', 'metricsets' => ['cpu', 'memory'], 'period' => '10s' }],
+            'outputs'    => { 'elasticsearch' => { 'hosts' => ['http://localhost:9200'] } },
+            'processors' => [
+              { 'add_cloud_metadata' => { 'timeout' => '3s' } },
+              { 'drop_fields' => { 'fields' => ['field1', 'field2'] } },
+            ],
+          }
+        end
 
-      #   it { is_expected.to compile }
-      # end
+        it { is_expected.to compile }
+      end
     end
   end
 end
