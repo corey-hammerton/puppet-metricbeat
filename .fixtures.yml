@@ -8,6 +8,7 @@ fixtures:
       puppet_version: ">= 6.0.0"
     apt: "https://github.com/puppetlabs/puppetlabs-apt.git"
     archive: "https://github.com/voxpupuli/puppet-archive.git"
+    powershell: "https://github.com/puppetlabs/puppetlabs-powershell.git"
     stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
     zypprepo: "https://github.com/voxpupuli/puppet-zypprepo.git"
   symlinks:
