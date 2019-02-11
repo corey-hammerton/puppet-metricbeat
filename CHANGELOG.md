@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.3.0
+
+**Added**
+- Support for Puppet 6.x
+- Support for Windows OS
+- XPack configuration for >= 6.x installations
+
 ## Release 0.2.0
 
 **Breaking**
