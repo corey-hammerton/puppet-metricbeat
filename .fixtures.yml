@@ -7,6 +7,7 @@ fixtures:
       repo: "https://github.com/puppetlabs/puppetlabs-yumrepo_core.git"
       puppet_version: ">= 6.0.0"
     apt: "https://github.com/puppetlabs/puppetlabs-apt.git"
+    archive: "https://github.com/voxpupuli/puppet-archive.git"
     stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
     zypprepo: "https://github.com/voxpupuli/puppet-zypprepo.git"
   symlinks:
