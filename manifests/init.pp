@@ -36,6 +36,11 @@
 # [String] The name of the beat which is published as the `beat.name`
 # field of each transaction. (default: $::hostname)
 #
+# * `config_file`
+# [String] The absolute path to the configuration file location. (default:
+# /etc/metricbeat/metricbeat.yaml on Linux, C:/Program Files/Metricbeat/metricbeat.yml
+# on Windows)
+#
 # * `config_mode`
 # [String] The file permission mode of the config file. Must be in Linux
 # octal format. Default: '0600'
@@ -43,6 +48,10 @@
 # * `disable_configtest`
 # [Boolean] If true disable configuration file testing. It is generally
 # recommended to leave this parameter at its default value. (default: false)
+#
+# * `download_url`
+# Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] The URL of the ZIP
+# file to download. Only valid on Windows nodes. (default: undef)
 #
 # * `ensure`
 # [String] Ensures that all required resources are managed or removed
@@ -58,6 +67,10 @@
 # sub-dictionary. When this is true custom fields are added to the top
 # level dictionary of each transaction. (default: false)
 #
+# * `install_dir`
+# Optional[String] The absolute path to the location where metricbeat will
+# be installed. Only applicable on Windows. (default: C:/Program Files)
+#
 # * `logging`
 # [Hash] The configuration section of File['metricbeat.yml'] for the
 # logging output. 
@@ -72,12 +85,17 @@
 #
 # * `package_ensure`
 # [String] The desired state of Package['metricbeat']. Only valid when
-# $ensure is present. (default: 'present')
+# $ensure is present. On Windows this is the version number of the package.
+# (default: 'present')
 #
 # * `processors`
 # Optional[Array[Hash]] An optional list of dictionaries to configure
 # processors, provided by libbeat, to process events before they are
 # sent to the output. (default: undef)
+#
+# * `proxy_address*
+# Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] The Proxy server used
+# for downloading files. (default: undef)
 #
 # * `queue`
 # [Hash] Configure the internal queue before being consumed by the output(s)
@@ -99,58 +117,61 @@
 # When false the init script's stop and start functions will be used.
 # (default: true)
 #
+# * `service_provider`
+# Optional[String] The optional service provider of the node. (default:
+# 'redhat' on RedHat nodes, undef otherwise)
+#
 # * `tags`
 # Optional[Array[String]] An optional list of values to include in the 
 # `tag` field of each published transaction. This is useful for
 # identifying groups of servers by logical property. (default: undef)
 #
+# * `tmp_dir`
+# String The absolute path to the temporary directory. On Windows, this
+# is the target directory for the ZIP file download. (default: /tmp on 
+# Linux, C:\Windows\Temp on Windows)
+#
+# * `url_arch
+# Optional[String] An optional string describing the architecture of
+# the target node. Only applicable on Windows nodes. (default: x86 or x64)
+#
 # * `xpack`
 # Optional[Hash] Configuration items to export internal stats to a
 # monitoring Elasticsearch cluster
 class metricbeat(
-  Array[Hash] $modules                                                = [{}],
-  Hash $outputs                                                       = {},
-  String $beat_name                                                   = $::hostname,
-  Pattern[/^0[0-7]{3}$/] $config_mode                                 = '0600',
-  Boolean $disable_configtest                                         = false,
-  Enum['present', 'absent'] $ensure                                   = 'present',
-  Optional[Hash] $fields                                              = undef,
-  Boolean $fields_under_root                                          = false,
-  Hash $logging                                                       = {
-    'level'     => 'info',
-    'files'     => {
-      'keepfiles'        => 7,
-      'name'             => 'metricbeat',
-      'path'             => '/var/log/metricbeat',
-      'rotateeverybytes' => '10485760',
-    },
-    'metrics'   => {
-      'enabled' => false,
-      'period'  => '30s',
-    },
-    'selectors' => undef,
-    'to_files'  => true,
-    'to_syslog' => false,
-  },
-  Enum['5', '6'] $major_version                                       = '5',
-  Boolean $manage_repo                                                = true,
-  String $package_ensure                                              = 'present',
-  Optional[Array[Hash]] $processors                                   = undef,
-  Hash $queue                                                         = {
-    'mem' => {
-      'events' => 4096,
-      'flush'  => {
-        'min_events' => 0,
-        'timeout'    => '0s',
-      },
-    },
-  },
-  Integer $queue_size                                                 = 1000,
-  Enum['enabled', 'disabled', 'running', 'unmanaged'] $service_ensure = 'enabled',
-  Boolean $service_has_restart                                        = true,
-  Optional[Array[String]] $tags                                       = undef,
-  Optional[Hash] $xpack                                               = undef,
-) {
+  Array[Hash] $modules                                                = $metricbeat::params::modules,
+  Hash $outputs                                                       = $metricbeat::params::outputs,
+  String $beat_name                                                   = $metricbeat::params::beat_name,
+  String $config_file                                                 = $metricbeat::params::config_file,
+  Pattern[/^0[0-7]{3}$/] $config_mode                                 = $metricbeat::params::config_mode,
+  Boolean $disable_configtest                                         = $metricbeat::params::disable_configtest,
+  Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $download_url  = $metricbeat::params::download_url,
+  Enum['present', 'absent'] $ensure                                   = $metricbeat::params::ensure,
+  Optional[Hash] $fields                                              = $metricbeat::params::fields,
+  Boolean $fields_under_root                                          = $metricbeat::params::fields_under_root,
+  Optional[String] $install_dir                                       = $metricbeat::params::install_dir,
+  Hash $logging                                                       = $metricbeat::params::logging,
+  Enum['5', '6'] $major_version                                       = $metricbeat::params::major_version,
+  Boolean $manage_repo                                                = $metricbeat::params::manage_repo,
+  String $package_ensure                                              = $metricbeat::params::package_ensure,
+  Optional[Array[Hash]] $processors                                   = $metricbeat::params::processors,
+  Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $proxy_address = $metricbeat::params::proxy_address,
+  Hash $queue                                                         = $metricbeat::params::queue,
+  Integer $queue_size                                                 = $metricbeat::params::queue_size,
+  Enum['enabled', 'disabled', 'running', 'unmanaged'] $service_ensure = $metricbeat::params::service_ensure,
+  Boolean $service_has_restart                                        = $metricbeat::params::service_has_restart,
+  Optional[String] $service_provider                                  = $metricbeat::params::service_provider,
+  Optional[Array[String]] $tags                                       = $metricbeat::params::tags,
+  String $tmp_dir                                                     = $metricbeat::params::tmp_dir,
+  Optional[String] $url_arch                                          = $metricbeat::params::url_arch,
+  Optional[Hash] $xpack                                               = $metricbeat::params::xpack,
+) inherits metricbeat::params {
+
+  $real_download_url = $download_url ? {
+    undef   => "https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-${package_ensure}-windows-${metricbeat::params::url_arch}.zip",
+    default => $download_url,
+  }
+
   if $manage_repo {
     class{'metricbeat::repo':}
 
