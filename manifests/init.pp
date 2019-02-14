@@ -46,10 +46,9 @@
 # [String] The name of the beat which is published as the `beat.name`
 # field of each transaction. (default: $::hostname)
 #
-# * `config_file`
-# [String] The absolute path to the configuration file location. (default:
-# /etc/metricbeat/metricbeat.yaml on Linux, C:/Program Files/Metricbeat/metricbeat.yml
-# on Windows)
+# * `config_dir`
+# [String] The absolute path to the configuration folder location. (default:
+# /etc/metricbeat on Linux, C:/Program Files/Metricbeat on Windows)
 #
 # * `config_mode`
 # [String] The file permission mode of the config file. Must be in Linux
@@ -132,13 +131,13 @@
 # 'redhat' on RedHat nodes, undef otherwise)
 #
 # * `tags`
-# Optional[Array[String]] An optional list of values to include in the 
+# Optional[Array[String]] An optional list of values to include in the
 # `tag` field of each published transaction. This is useful for
 # identifying groups of servers by logical property. (default: undef)
 #
 # * `tmp_dir`
 # String The absolute path to the temporary directory. On Windows, this
-# is the target directory for the ZIP file download. (default: /tmp on 
+# is the target directory for the ZIP file download. (default: /tmp on
 # Linux, C:\Windows\Temp on Windows)
 #
 # * `url_arch
@@ -152,9 +151,10 @@ class metricbeat(
   String $cloud_id                                                    = $metricbeat::params::cloud_id,
   String $cloud_auth                                                  = $metricbeat::params::cloud_auth,
   Array[Hash] $modules                                                = $metricbeat::params::modules,
+  Array[String] $module_templates                                     = $metricbeat::params::module_templates,
   Hash $outputs                                                       = $metricbeat::params::outputs,
   String $beat_name                                                   = $metricbeat::params::beat_name,
-  String $config_file                                                 = $metricbeat::params::config_file,
+  String $config_dir                                                  = $metricbeat::params::config_dir,
   Pattern[/^0[0-7]{3}$/] $config_mode                                 = $metricbeat::params::config_mode,
   Boolean $disable_configtest                                         = $metricbeat::params::disable_configtest,
   Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $download_url  = $metricbeat::params::download_url,

@@ -6,18 +6,19 @@
 # @summary Manages Metricbeat's configuration file
 class metricbeat::config inherits metricbeat {
 
+  # check if array is empty, no need to create a config entry then
   if $metricbeat::modules[0].length() > 0 {
     $modules_arr = $metricbeat::modules
   } else {
     $modules_arr = undef
   }
 
+  # if fields are "under root", then remove prefix
   if $fields_under_root == true {
     $fields_tmp = $metricbeat::fields.each | $key, $value | { {$key => $value} }
   } else {
     $fields_tmp = $metricbeat::fields
   }
-  notice($fields_tmp)
 
   if $metricbeat::major_version == '5' {
     $metricbeat_config_base = delete_undef_values({
@@ -61,6 +62,20 @@ class metricbeat::config inherits metricbeat {
 
   }
 
+  # extra modules under `modules.d` folder, if any
+  $module_templates_real = hiera_array('metricbeat::module_templates', $metricbeat::module_templates)
+  each($module_templates_real) |$module_name| {
+    file { "${metricbeat::config_dir}/modules.d/${module_name}.yml":
+      ensure  => present,
+      source  => "puppet:///modules/metricbeat/${module_name}.yml",
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      require => Package['metricbeat'],
+      notify  => Service['metricbeat'],
+    }
+  }
+
   case $::kernel {
     'Linux': {
       $validate_cmd = $metricbeat::disable_configtest ? {
@@ -73,12 +88,14 @@ class metricbeat::config inherits metricbeat {
 
       file{'metricbeat.yml':
         ensure       => $metricbeat::ensure,
-        path         => $metricbeat::config_file,
+        path         => "${metricbeat::config_dir}/metricbeat.yml",
         owner        => 'root',
         group        => 'root',
         mode         => $metricbeat::config_mode,
         content      => inline_template('<%= @metricbeat_config.to_yaml() %>'),
         validate_cmd => $validate_cmd,
+        require      => Package['metricbeat'],
+        notify       => Service['metricbeat'],
       }
     }
     'Windows': {
@@ -94,9 +111,11 @@ class metricbeat::config inherits metricbeat {
 
       file{'metricbeat.yml':
         ensure       => $metricbeat::ensure,
-        path         => $metricbeat::config_file,
+        path         => "${metricbeat::config_dir}/metricbeat.yml",
         content      => inline_template('<%= @metricbeat_config.to_yaml() %>'),
         validate_cmd => $validate_cmd,
+        require      => Package['metricbeat'],
+        notify       => Service['metricbeat'],
       }
     }
     default: {

@@ -17,6 +17,7 @@ class metricbeat::params {
   $manage_repo        = true
   $major_version      = '5'
   $modules            = [{}]
+  $module_templates   = ['system']
   $outputs            = {}
   $processors         = undef
   $proxy_address      = undef
@@ -37,7 +38,7 @@ class metricbeat::params {
 
   case $::kernel {
     'Linux': {
-      $config_file = '/etc/metricbeat/metricbeat.yml'
+      $config_dir = '/etc/metricbeat'
       $install_dir = undef
       $logging     = {
         'level' => 'info',
@@ -64,7 +65,7 @@ class metricbeat::params {
       $url_arch       = undef
     }
     'Windows': {
-      $config_file      = 'C:/Program Files/Metricbeat/metricbeat.yml'
+      $config_dir      = 'C:/Program Files/Metricbeat'
       $install_dir      = 'C:/Program Files'
       $logging          = {
         'level' => 'info',
