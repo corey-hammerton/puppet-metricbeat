@@ -5,6 +5,8 @@
 #
 # @summary Manages Metricbeat's configuration file
 class metricbeat::config inherits metricbeat {
+  $dir_name = dirname($metricbeat::config_file)
+
   if $metricbeat::major_version == '5' {
     $metricbeat_config = delete_undef_values({
       'name'              => $metricbeat::beat_name,
@@ -51,7 +53,7 @@ class metricbeat::config inherits metricbeat {
         true    => undef,
         default => $metricbeat::major_version ? {
           '5'     => '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
-          default => '/usr/share/metricbeat/bin/metricbeat test config',
+          default => "/usr/share/metricbeat/bin/metricbeat --path.config ${dir_name} test config",
         }
       }
 
@@ -72,7 +74,7 @@ class metricbeat::config inherits metricbeat {
         true    => undef,
         default => $metricbeat::major_version ? {
           '5' => "\"${metricbeat_path}\" -N configtest -c \"%\"",
-          default => "\"${metricbeat_path}\" test config",
+          default => "\"${metricbeat_path}\" --path.config ${dir_name} test config",
         }
       }
 
