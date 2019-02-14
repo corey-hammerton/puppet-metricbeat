@@ -6,6 +6,8 @@
 #   include metricbeat::params
 class metricbeat::params {
   $ensure             = 'present'
+  $cloud_id           = undef
+  $cloud_auth         = undef
   $beat_name          = $::hostname
   $config_mode        = '0600'
   $disable_configtest = false

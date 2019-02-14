@@ -5,11 +5,25 @@
 #
 # @summary Manages Metricbeat's configuration file
 class metricbeat::config inherits metricbeat {
+
+  if $metricbeat::modules[0].length() > 0 {
+    $modules_arr = $metricbeat::modules
+  } else {
+    $modules_arr = undef
+  }
+
+  if $fields_under_root == true {
+    $fields_tmp = $metricbeat::fields.each | $key, $value | { {$key => $value} }
+  } else {
+    $fields_tmp = $metricbeat::fields
+  }
+  notice($fields_tmp)
+
   if $metricbeat::major_version == '5' {
-    $metricbeat_config = delete_undef_values({
+    $metricbeat_config_base = delete_undef_values({
+      'cloud.id'          => $metricbeat::cloud_id,
+      'cloud.auth'        => $metricbeat::cloud_auth,
       'name'              => $metricbeat::beat_name,
-      'fields'            => $metricbeat::fields,
-      'fields_under_root' => $metricbeat::fields_under_root,
       'tags'              => $metricbeat::tags,
       'logging'           => $metricbeat::logging,
       'processors'        => $metricbeat::processors,
@@ -19,21 +33,23 @@ class metricbeat::config inherits metricbeat {
       },
       'output'            => $metricbeat::outputs,
     })
+
+    $metricbeat_config = deep_merge($metricbeat_config_base, $fields_tmp)
   }
   elsif $metricbeat::major_version == '6' {
-    $metricbeat_config_temp = delete_undef_values({
+    $metricbeat_config_base = delete_undef_values({
+      'cloud.id'          => $metricbeat::cloud_id,
+      'cloud.auth'        => $metricbeat::cloud_auth,
       'name'              => $metricbeat::beat_name,
-      'fields'            => $metricbeat::fields,
-      'fields_under_root' => $metricbeat::fields_under_root,
       'tags'              => $metricbeat::tags,
       'logging'           => $metricbeat::logging,
       'processors'        => $metricbeat::processors,
       'queue'             => $metricbeat::queue,
-      'metricbeat'        => {
-        'modules'           => $metricbeat::modules,
-      },
+      'metricbeat'        => $modules_arr,
       'output'            => $metricbeat::outputs,
     })
+
+    $metricbeat_config_temp = deep_merge($metricbeat_config_base, $fields_tmp)
 
     # Add the 'xpack' section if supported (version >= 6.2.0)
     if versioncmp($metricbeat::package_ensure, '6.2.0') >= 0 {
@@ -51,7 +67,7 @@ class metricbeat::config inherits metricbeat {
         true    => undef,
         default => $metricbeat::major_version ? {
           '5'     => '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
-          default => '/usr/share/metricbeat/bin/metricbeat test config',
+          default => 'cp % /tmp/metricbeat-puppet.yml ; /usr/share/metricbeat/bin/metricbeat test config -c %',
         }
       }
 

@@ -24,6 +24,16 @@
 # Parameters
 # ----------
 #
+# * `cloud_id`
+# [String] The cloud.id setting overwrites the `output.elasticsearch.hosts` and
+# `setup.kibana.host` options. You can find the `cloud.id` in the Elastic Cloud
+# web UI. Default: undef
+#
+# * `cloud_auth`
+# [String] The cloud.auth setting overwrites the `output.elasticsearch.username`
+# and `output.elasticsearch.password` settings. The format is `<user>:<pass>`.
+# Default: undef
+#
 # * `modules`
 # Array[Hash] The array of modules this instance of metricbeat will
 # collect. (default: [{}])
@@ -73,7 +83,7 @@
 #
 # * `logging`
 # [Hash] The configuration section of File['metricbeat.yml'] for the
-# logging output. 
+# logging output.
 #
 # * `major_version`
 # [Enum] The major version of Metricbeat to install from vendor repositories.
@@ -139,6 +149,8 @@
 # Optional[Hash] Configuration items to export internal stats to a
 # monitoring Elasticsearch cluster
 class metricbeat(
+  String $cloud_id                                                    = $metricbeat::params::cloud_id,
+  String $cloud_auth                                                  = $metricbeat::params::cloud_auth,
   Array[Hash] $modules                                                = $metricbeat::params::modules,
   Hash $outputs                                                       = $metricbeat::params::outputs,
   String $beat_name                                                   = $metricbeat::params::beat_name,
