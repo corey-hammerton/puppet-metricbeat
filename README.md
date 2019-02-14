@@ -100,6 +100,33 @@ class{'metricbeat':
 }
 ```
 
+To use the module via Hiera:
+
+```yml
+metricbeat::major_version: '6'
+metricbeat::manage_repo: true
+metricbeat::package_ensure: 'latest'
+metricbeat::cloud_id: 'xxx'
+metricbeat::cloud_auth: 'xxx:xxx'
+metricbeat::fields_under_root: true
+metricbeat::fields:
+  'metricbeat.config.modules':
+    'path': '${path.config}/modules.d/*.yml'
+    'reload.enabled': false
+  'setup.dashboards.enabled': true
+  'setup.template.settings':
+    'index.number_of_shards': 1
+    'index.codec': 'best_compression'
+metricbeat::outputs:
+  'elasticsearch':
+    'hosts': 'localhost:9200'
+metricbeat::xpack:
+  'monitoring':
+    'enabled': true
+metricbeat::module_templates:
+  - system
+```
+
 Please review the [elastic documentation](https://www.elastic.co/guide/en/beats/metricbeat/current/index.html) for configuration options
 and service compatability.
 
