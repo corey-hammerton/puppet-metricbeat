@@ -66,7 +66,7 @@
 # [String] Ensures that all required resources are managed or removed
 # from the target node. This is good for bulk uninstallation across a
 # network. Valid values are 'present' or 'absent'. (default: 'present')
-# 
+#
 # * `fields`
 # Optional[Hash] Optional fields to add to each transaction to provide
 # additonal information. (default: undef)
@@ -148,8 +148,8 @@
 # Optional[Hash] Configuration items to export internal stats to a
 # monitoring Elasticsearch cluster
 class metricbeat(
-  String $cloud_id                                                    = $metricbeat::params::cloud_id,
-  String $cloud_auth                                                  = $metricbeat::params::cloud_auth,
+  Optional[String] $cloud_id                                          = $metricbeat::params::cloud_id,
+  Optional[String] $cloud_auth                                        = $metricbeat::params::cloud_auth,
   Array[Hash] $modules                                                = $metricbeat::params::modules,
   Array[String] $module_templates                                     = $metricbeat::params::module_templates,
   Hash $outputs                                                       = $metricbeat::params::outputs,
