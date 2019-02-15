@@ -83,7 +83,7 @@ class metricbeat::params {
         'to_eventlog' => false,
         'to_files'    => true,
       }
-      $package_ensure   = '5.6.2'
+      $package_ensure   = '6.6.0'
       $service_provider = undef
       $tmp_dir          = 'C:/Windows/Temp'
       $url_arch         = $::architecture ? {
