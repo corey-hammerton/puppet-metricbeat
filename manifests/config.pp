@@ -14,7 +14,7 @@ class metricbeat::config inherits metricbeat {
   }
 
   # if fields are "under root", then remove prefix
-  if $fields_under_root == true {
+  if $metricbeat::fields_under_root == true {
     $fields_tmp = $metricbeat::fields.each | $key, $value | { {$key => $value} }
   } else {
     $fields_tmp = $metricbeat::fields
@@ -82,7 +82,7 @@ class metricbeat::config inherits metricbeat {
         true    => undef,
         default => $metricbeat::major_version ? {
           '5'     => '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
-          default => '/usr/share/metricbeat/bin/metricbeat test config -c %',
+          default => '/usr/share/metricbeat/bin/metricbeat --path.config ${metricbeat::config_dir} test config',
         }
       }
 
@@ -105,7 +105,7 @@ class metricbeat::config inherits metricbeat {
         true    => undef,
         default => $metricbeat::major_version ? {
           '5' => "\"${metricbeat_path}\" -N configtest -c \"%\"",
-          default => "\"${metricbeat_path}\" test config",
+          default => "\"${metricbeat_path}\" --path.config ${metricbeat::config_dir} test config",
         }
       }
 
