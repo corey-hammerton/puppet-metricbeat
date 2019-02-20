@@ -66,11 +66,11 @@ class metricbeat::config inherits metricbeat {
   $module_templates_real = hiera_array('metricbeat::module_templates', $metricbeat::module_templates)
   each($module_templates_real) |$module_name| {
     file { "${metricbeat::config_dir}/modules.d/${module_name}.yml":
-      ensure  => present,
-      source  => "puppet:///modules/metricbeat/${module_name}.yml",
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0644',
+      ensure => present,
+      source => "puppet:///modules/metricbeat/${module_name}.yml",
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0644',
     }
   }
 
