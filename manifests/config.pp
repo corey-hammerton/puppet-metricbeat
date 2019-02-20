@@ -94,8 +94,6 @@ class metricbeat::config inherits metricbeat {
         mode         => $metricbeat::config_mode,
         content      => inline_template('<%= @metricbeat_config.to_yaml() %>'),
         validate_cmd => $validate_cmd,
-        require      => Package['metricbeat'],
-        notify       => Service['metricbeat'],
       }
     }
     'Windows': {
@@ -114,8 +112,6 @@ class metricbeat::config inherits metricbeat {
         path         => "${metricbeat::config_dir}/metricbeat.yml",
         content      => inline_template('<%= @metricbeat_config.to_yaml() %>'),
         validate_cmd => $validate_cmd,
-        require      => Package['metricbeat'],
-        notify       => Service['metricbeat'],
       }
     }
     default: {
