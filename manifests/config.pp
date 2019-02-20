@@ -101,7 +101,7 @@ class metricbeat::config inherits metricbeat {
         true    => undef,
         default => $metricbeat::major_version ? {
           '5' => "\"${metricbeat_path}\" -N configtest -c \"%\"",
-          default => "\"${metricbeat_path}\" --path.config ${metricbeat::config_dir} test config",
+          default => "\"${metricbeat_path}\" --path.config \"${metricbeat::config_dir}\" test config",
         }
       }
 
