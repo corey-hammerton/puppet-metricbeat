@@ -71,8 +71,6 @@ class metricbeat::config inherits metricbeat {
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      require => Package['metricbeat'],
-      notify  => Service['metricbeat'],
     }
   }
 
