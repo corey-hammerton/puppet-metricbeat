@@ -107,7 +107,7 @@ describe 'metricbeat' do
               is_expected.to contain_file('metricbeat.yml').with(
                 ensure: 'present',
                 path: 'C:/Program Files/Metricbeat/metricbeat.yml',
-                validate_cmd: "\"C:\\Program Files\\Metricbeat\\metricbeat.exe\" --path.config C:/Program Files/Metricbeat test config", # rubocop:disable StringLiterals
+                validate_cmd: "\"C:\\Program Files\\Metricbeat\\metricbeat.exe\" --path.config \"C:/Program Files/Metricbeat\" test config", # rubocop:disable StringLiterals
               )
             end
           else

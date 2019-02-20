@@ -80,7 +80,7 @@ class metricbeat::config inherits metricbeat {
         true    => undef,
         default => $metricbeat::major_version ? {
           '5'     => '/usr/share/metricbeat/bin/metricbeat -configtest -c %',
-          default => '/usr/share/metricbeat/bin/metricbeat --path.config ${metricbeat::config_dir} test config',
+          default => "/usr/share/metricbeat/bin/metricbeat --path.config ${metricbeat::config_dir} test config",
         }
       }
 
