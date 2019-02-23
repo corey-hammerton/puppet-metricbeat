@@ -107,7 +107,7 @@ describe 'metricbeat' do
               is_expected.to contain_file('metricbeat.yml').with(
                 ensure: 'present',
                 path: 'C:/Program Files/Metricbeat/metricbeat.yml',
-                validate_cmd: "\"C:\\Program Files\\Metricbeat\\metricbeat.exe\" --path.config C:/Program Files/Metricbeat test config", # rubocop:disable StringLiterals
+                validate_cmd: "\"C:\\Program Files\\Metricbeat\\metricbeat.exe\" --path.config \"C:/Program Files/Metricbeat\" test config", # rubocop:disable StringLiterals
               )
             end
           else
@@ -129,28 +129,28 @@ describe 'metricbeat' do
         if os_facts[:kernel] == 'windows'
           it do
             is_expected.to contain_file('C:/Program Files').with(ensure: 'directory')
-            is_expected.to contain_archive('C:/Windows/Temp/metricbeat-5.6.2-windows-x86_64.zip').with(
-              creates: 'C:/Program Files/Metricbeat/metricbeat-5.6.2-windows-x86_64',
-              source: 'https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-5.6.2-windows-x86_64.zip',
+            is_expected.to contain_archive('C:/Windows/Temp/metricbeat-6.6.1-windows-x86_64.zip').with(
+              creates: 'C:/Program Files/Metricbeat/metricbeat-6.6.1-windows-x86_64',
+              source: 'https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-6.6.1-windows-x86_64.zip',
             )
-            is_expected.to contain_exec('unzip metricbeat-5.6.2-windows-x86_64').with(
-              command: "\$sh=New-Object -COM Shell.Application;\$sh.namespace((Convert-Path 'C:/Program Files')).Copyhere(\$sh.namespace((Convert-Path 'C:/Windows/Temp/metricbeat-5.6.2-windows-x86_64.zip')).items(), 16)", # rubocop:disable LineLength
-              creates: 'C:/Program Files/Metricbeat/metricbeat-5.6.2-windows-x86_64',
+            is_expected.to contain_exec('unzip metricbeat-6.6.1-windows-x86_64').with(
+              command: "\$sh=New-Object -COM Shell.Application;\$sh.namespace((Convert-Path 'C:/Program Files')).Copyhere(\$sh.namespace((Convert-Path 'C:/Windows/Temp/metricbeat-6.6.1-windows-x86_64.zip')).items(), 16)", # rubocop:disable LineLength
+              creates: 'C:/Program Files/Metricbeat/metricbeat-6.6.1-windows-x86_64',
             )
-            is_expected.to contain_exec('stop service metricbeat-5.6.2-windows-x86_64').with(
-              creates: 'C:/Program Files/Metricbeat/metricbeat-5.6.2-windows-x86_64',
+            is_expected.to contain_exec('stop service metricbeat-6.6.1-windows-x86_64').with(
+              creates: 'C:/Program Files/Metricbeat/metricbeat-6.6.1-windows-x86_64',
               command: 'Set-Service -Name metricbeat -Status Stopped',
               onlyif: 'if(Get-WmiObject -Class Win32_Service -Filter "Name=\'metricbeat\'") {exit 0} else {exit 1}',
             )
-            is_expected.to contain_exec('rename metricbeat-5.6.2-windows-x86_64').with(
-              creates: 'C:/Program Files/Metricbeat/metricbeat-5.6.2-windows-x86_64',
-              command: "Remove-Item 'C:/Program Files/Metricbeat' -Recurse -Force -ErrorAction SilentlyContinue;Rename-Item 'C:/Program Files/metricbeat-5.6.2-windows-x86_64' 'C:/Program Files/Metricbeat'", # rubocop:disable LineLength
+            is_expected.to contain_exec('rename metricbeat-6.6.1-windows-x86_64').with(
+              creates: 'C:/Program Files/Metricbeat/metricbeat-6.6.1-windows-x86_64',
+              command: "Remove-Item 'C:/Program Files/Metricbeat' -Recurse -Force -ErrorAction SilentlyContinue;Rename-Item 'C:/Program Files/metricbeat-6.6.1-windows-x86_64' 'C:/Program Files/Metricbeat'", # rubocop:disable LineLength
             )
-            is_expected.to contain_exec('mark metricbeat-5.6.2-windows-x86_64').with(
-              creates: 'C:/Program Files/Metricbeat/metricbeat-5.6.2-windows-x86_64',
-              command: "New-Item 'C:/Program Files/Metricbeat/metricbeat-5.6.2-windows-x86_64' -ItemType file",
+            is_expected.to contain_exec('mark metricbeat-6.6.1-windows-x86_64').with(
+              creates: 'C:/Program Files/Metricbeat/metricbeat-6.6.1-windows-x86_64',
+              command: "New-Item 'C:/Program Files/Metricbeat/metricbeat-6.6.1-windows-x86_64' -ItemType file",
             )
-            is_expected.to contain_exec('install metricbeat-5.6.2-windows-x86_64').with(
+            is_expected.to contain_exec('install metricbeat-6.6.1-windows-x86_64').with(
               command: './install-service-metricbeat.ps1',
               cwd: 'C:/Program Files/Metricbeat',
               refreshonly: true,
@@ -169,10 +169,10 @@ describe 'metricbeat' do
         end
 
         describe 'with package_ensure to a specific version' do
-          let(:params) { { 'package_ensure' => '5.6.2-1' } }
+          let(:params) { { 'package_ensure' => '6.6.1' } }
 
           if os_facts[:kernel] != 'windows'
-            it { is_expected.to contain_package('metricbeat').with(ensure: '5.6.2-1') }
+            it { is_expected.to contain_package('metricbeat').with(ensure: '6.6.1') }
           end
         end
 

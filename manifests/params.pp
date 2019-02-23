@@ -6,6 +6,8 @@
 #   include metricbeat::params
 class metricbeat::params {
   $ensure             = 'present'
+  $cloud_id           = undef
+  $cloud_auth         = undef
   $beat_name          = $::hostname
   $config_mode        = '0600'
   $disable_configtest = false
@@ -15,6 +17,7 @@ class metricbeat::params {
   $manage_repo        = true
   $major_version      = '5'
   $modules            = [{}]
+  $module_templates   = ['system']
   $outputs            = {}
   $processors         = undef
   $proxy_address      = undef
@@ -35,7 +38,7 @@ class metricbeat::params {
 
   case $::kernel {
     'Linux': {
-      $config_file = '/etc/metricbeat/metricbeat.yml'
+      $config_dir = '/etc/metricbeat'
       $install_dir = undef
       $logging     = {
         'level' => 'info',
@@ -62,7 +65,7 @@ class metricbeat::params {
       $url_arch       = undef
     }
     'Windows': {
-      $config_file      = 'C:/Program Files/Metricbeat/metricbeat.yml'
+      $config_dir      = 'C:/Program Files/Metricbeat'
       $install_dir      = 'C:/Program Files'
       $logging          = {
         'level' => 'info',
@@ -80,7 +83,7 @@ class metricbeat::params {
         'to_eventlog' => false,
         'to_files'    => true,
       }
-      $package_ensure   = '5.6.2'
+      $package_ensure   = '6.6.1'
       $service_provider = undef
       $tmp_dir          = 'C:/Windows/Temp'
       $url_arch         = $::architecture ? {

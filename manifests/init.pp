@@ -24,6 +24,16 @@
 # Parameters
 # ----------
 #
+# * `cloud_id`
+# [String] The cloud.id setting overwrites the `output.elasticsearch.hosts` and
+# `setup.kibana.host` options. You can find the `cloud.id` in the Elastic Cloud
+# web UI. Default: undef
+#
+# * `cloud_auth`
+# [String] The cloud.auth setting overwrites the `output.elasticsearch.username`
+# and `output.elasticsearch.password` settings. The format is `<user>:<pass>`.
+# Default: undef
+#
 # * `modules`
 # Array[Hash] The array of modules this instance of metricbeat will
 # collect. (default: [{}])
@@ -36,10 +46,9 @@
 # [String] The name of the beat which is published as the `beat.name`
 # field of each transaction. (default: $::hostname)
 #
-# * `config_file`
-# [String] The absolute path to the configuration file location. (default:
-# /etc/metricbeat/metricbeat.yaml on Linux, C:/Program Files/Metricbeat/metricbeat.yml
-# on Windows)
+# * `config_dir`
+# [String] The absolute path to the configuration folder location. (default:
+# /etc/metricbeat on Linux, C:/Program Files/Metricbeat on Windows)
 #
 # * `config_mode`
 # [String] The file permission mode of the config file. Must be in Linux
@@ -57,7 +66,7 @@
 # [String] Ensures that all required resources are managed or removed
 # from the target node. This is good for bulk uninstallation across a
 # network. Valid values are 'present' or 'absent'. (default: 'present')
-# 
+#
 # * `fields`
 # Optional[Hash] Optional fields to add to each transaction to provide
 # additonal information. (default: undef)
@@ -73,7 +82,7 @@
 #
 # * `logging`
 # [Hash] The configuration section of File['metricbeat.yml'] for the
-# logging output. 
+# logging output.
 #
 # * `major_version`
 # [Enum] The major version of Metricbeat to install from vendor repositories.
@@ -122,13 +131,13 @@
 # 'redhat' on RedHat nodes, undef otherwise)
 #
 # * `tags`
-# Optional[Array[String]] An optional list of values to include in the 
+# Optional[Array[String]] An optional list of values to include in the
 # `tag` field of each published transaction. This is useful for
 # identifying groups of servers by logical property. (default: undef)
 #
 # * `tmp_dir`
 # String The absolute path to the temporary directory. On Windows, this
-# is the target directory for the ZIP file download. (default: /tmp on 
+# is the target directory for the ZIP file download. (default: /tmp on
 # Linux, C:\Windows\Temp on Windows)
 #
 # * `url_arch
@@ -139,10 +148,13 @@
 # Optional[Hash] Configuration items to export internal stats to a
 # monitoring Elasticsearch cluster
 class metricbeat(
+  Optional[String] $cloud_id                                          = $metricbeat::params::cloud_id,
+  Optional[String] $cloud_auth                                        = $metricbeat::params::cloud_auth,
   Array[Hash] $modules                                                = $metricbeat::params::modules,
+  Array[String] $module_templates                                     = $metricbeat::params::module_templates,
   Hash $outputs                                                       = $metricbeat::params::outputs,
   String $beat_name                                                   = $metricbeat::params::beat_name,
-  String $config_file                                                 = $metricbeat::params::config_file,
+  String $config_dir                                                  = $metricbeat::params::config_dir,
   Pattern[/^0[0-7]{3}$/] $config_mode                                 = $metricbeat::params::config_mode,
   Boolean $disable_configtest                                         = $metricbeat::params::disable_configtest,
   Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $download_url  = $metricbeat::params::download_url,
