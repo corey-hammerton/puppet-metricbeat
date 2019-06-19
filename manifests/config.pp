@@ -14,10 +14,12 @@ class metricbeat::config inherits metricbeat {
   }
 
   # if fields are "under root", then remove prefix
-  if $metricbeat::fields_under_root == true {
-    $fields_tmp = $metricbeat::fields.each | $key, $value | { {$key => $value} }
-  } else {
-    $fields_tmp = $metricbeat::fields
+  if $metricbeat::fields {
+    if $metricbeat::fields_under_root == true {
+      $fields_tmp = $metricbeat::fields.each | $key, $value | { {$key => $value} }
+    } else {
+      $fields_tmp = $metricbeat::fields
+    }
   }
 
   if $metricbeat::major_version == '5' {
@@ -47,10 +49,17 @@ class metricbeat::config inherits metricbeat {
       'processors'         => $metricbeat::processors,
       'queue'              => $metricbeat::queue,
       'metricbeat.modules' => $modules_arr,
+      'fields_under_root'  => $metricbeat::fields_under_root,
       'output'             => $metricbeat::outputs,
     })
 
-    $metricbeat_config_temp = deep_merge($metricbeat_config_base, $fields_tmp)
+    if $fields_tmp {
+      $fields_tmp2 = { 'fields' => $fields_tmp, }
+      $metricbeat_config_temp = deep_merge( $metricbeat_config_base, $fields_tmp2 )
+    } else {
+      $metricbeat_config_temp = $metricbeat_config_base
+    }
+
 
     # Add the 'xpack' section if supported (version >= 6.2.0)
     if versioncmp($metricbeat::package_ensure, '6.2.0') >= 0 {
