@@ -86,7 +86,7 @@
 #
 # * `major_version`
 # [Enum] The major version of Metricbeat to install from vendor repositories.
-# Valid values are '5' and '6'. (default: '5')
+# Valid values are '5', '6' and '7'. (default: '5')
 #
 # * `manage_repo`
 # [Boolean] Weather the upstream (elastic) repository should be
@@ -163,7 +163,7 @@ class metricbeat(
   Boolean $fields_under_root                                          = $metricbeat::params::fields_under_root,
   Optional[String] $install_dir                                       = $metricbeat::params::install_dir,
   Hash $logging                                                       = $metricbeat::params::logging,
-  Enum['5', '6'] $major_version                                       = $metricbeat::params::major_version,
+  Enum['5', '6', '7'] $major_version                                  = $metricbeat::params::major_version,
   Boolean $manage_repo                                                = $metricbeat::params::manage_repo,
   String $package_ensure                                              = $metricbeat::params::package_ensure,
   Optional[Array[Hash]] $processors                                   = $metricbeat::params::processors,
