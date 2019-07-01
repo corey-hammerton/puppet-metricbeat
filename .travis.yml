@@ -1,5 +1,5 @@
 ---
-dist: trusty
+dist: xenial
 language: ruby
 cache: bundler
 before_install:
@@ -12,31 +12,34 @@ script:
   - 'bundle exec rake $CHECK'
 bundler_args: --without system_tests
 rvm:
-  - 2.5.1
-env:
-  global:
-    - BEAKER_PUPPET_COLLECTION=puppet6 PUPPET_GEM_VERSION="~> 6.0"
+  - 2.5.3
+stages:
+  - static
+  - spec
+  - acceptance
+  -
+    if: tag =~ ^v\d
+    name: deploy
 matrix:
   fast_finish: true
   include:
     -
-      env: CHECK="syntax lint metadata_lint check:symlinks check:git_ignore check:dot_underscore check:test_file rubocop"
-    -
-      env: CHECK=parallel_spec
+      env: CHECK="check:symlinks check:git_ignore check:dot_underscore check:test_file rubocop syntax lint metadata_lint"
+      stage: static
     -
       env: PUPPET_GEM_VERSION="~> 5.0" CHECK=parallel_spec
-      rvm: 2.4.4
+      rvm: 2.4.5
+      stage: spec
+    -
+      env: PUPPET_GEM_VERSION="~> 6.0" CHECK=parallel_spec
+      rvm: 2.5.3
+      stage: spec
+    -
+      env: DEPLOY_TO_FORGE=yes
+      stage: deploy
 branches:
   only:
     - master
     - /^v\d/
 notifications:
   email: false
-deploy:
-  provider: puppetforge
-  user: coreyh
-  password:
-    secure: "mSHC0wTk0IncTm8O8JeFB/UThuEIgJ9lxn40Rb7h2ePv2N6ecPZzxu5rh8Q0dZXvzlLvlQJCYmxWOUPciwwGQZMw4kqevpZOjHdeh+Q3iHcZhvVKx4B546NYcJeNztGnTcIERV6JPQwjWA/DLkljNM8JtpVz1lfTYqkL50BtliKHfyjzNe+/VT9j8+eRbT9sNff+EvBRGnbL7Gb6aCgKa0+OUWf+nEzkER+hZYb3MmM0CA53Jh38p8scY2zJGAbY0ExauIJieElropexPx45fJ04vM9pqrWz434q2soZWgk0ffEamFNHXJh0h0DcTIhGZaibov7BXatmL+xXGAWyfwgOeLuBBuHgmRh1WvZlWPZMTcoN38hG5eqdNXJtf/UwTdQaFohyriWHrfqPOa9hCUbcyIpQQyrllGkGqxIxQ6dk3FQJEI7NivNZVZMnFPaZhXRpRALePuGR488N5kZoFvWKX5cRPaD/X60vILRAts4MElmy1HIzrU3tC+mtmunD8F/9SqQCEYAuR0PQvN6NyeewGWaTgiEiBnlK/zuU1XmHGgJOB+psV83SkKutIjAv5Qc6JH6YiAsRZC8DPSPawlbqDZmSFUi/HBK71XHSXY5pAwx/NT9SLuvrxsCCWCwvLeyY0wtn2D1ciZQ55HaanEo2cs6OZb7Y8GF7RQcCfgk="
-  on:
-    tags: true
-    all_branches: true
