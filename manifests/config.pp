@@ -39,15 +39,15 @@ class metricbeat::config inherits metricbeat {
   }
   elsif $metricbeat::major_version == '6' {
     $metricbeat_config_base = delete_undef_values({
-      'cloud.id'          => $metricbeat::cloud_id,
-      'cloud.auth'        => $metricbeat::cloud_auth,
-      'name'              => $metricbeat::beat_name,
-      'tags'              => $metricbeat::tags,
-      'logging'           => $metricbeat::logging,
-      'processors'        => $metricbeat::processors,
-      'queue'             => $metricbeat::queue,
-      'metricbeat'        => $modules_arr,
-      'output'            => $metricbeat::outputs,
+      'cloud.id'           => $metricbeat::cloud_id,
+      'cloud.auth'         => $metricbeat::cloud_auth,
+      'name'               => $metricbeat::beat_name,
+      'tags'               => $metricbeat::tags,
+      'logging'            => $metricbeat::logging,
+      'processors'         => $metricbeat::processors,
+      'queue'              => $metricbeat::queue,
+      'metricbeat.modules' => $modules_arr,
+      'output'             => $metricbeat::outputs,
     })
 
     $metricbeat_config_temp = deep_merge($metricbeat_config_base, $fields_tmp)
