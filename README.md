@@ -232,6 +232,12 @@ Installs and configures metricbeat.
   'restart' command instead of 'stop' and 'start'. (default: true)
 - `tags`: [Array] Optional list of tags to help group different logical properties
   easily. (default: undef)
+- `apt_repo_url`: [String] The URL of the APT repository to install Metricbeat from.
+  Only applicable on Debian systems.
+  (default: "https://artifacts.elastic.co/packages/${metricbeat::major_version}.x/apt")
+- `yum_repo_url`: [String] The URL of the YUM repository to install Metricbeat from.
+  Only applicable on RedHat or Suse systems.
+  (default: "https://artifacts.elastic.co/packages/${metricbeat::major_version}.x/yum")
 
 
 ### Private Classes

@@ -24,6 +24,10 @@
 # Parameters
 # ----------
 #
+# * `apt_repo_url`
+# [String] The URL of the APT repository to install Metricbeat from. Only
+# applicable on Debian systems. Default: https://artifacts.elastic.co/packages/${metricbeat::major_version}.x/apt
+#
 # * `cloud_id`
 # [String] The cloud.id setting overwrites the `output.elasticsearch.hosts` and
 # `setup.kibana.host` options. You can find the `cloud.id` in the Elastic Cloud
@@ -136,7 +140,7 @@
 # identifying groups of servers by logical property. (default: undef)
 #
 # * `tmp_dir`
-# String The absolute path to the temporary directory. On Windows, this
+# [String] The absolute path to the temporary directory. On Windows, this
 # is the target directory for the ZIP file download. (default: /tmp on
 # Linux, C:\Windows\Temp on Windows)
 #
@@ -147,7 +151,13 @@
 # * `xpack`
 # Optional[Hash] Configuration items to export internal stats to a
 # monitoring Elasticsearch cluster
+#
+# * `yum_repo_url`
+# [String] The URL of the YUM repo to install Metricbeat from. Only
+# applicable on RedHat or Suse based systems. 
+# Default: https://artifacts.elastic.co/packages/${metricbeat::major_version}.x/yum
 class metricbeat(
+  Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $apt_repo_url  = $metricbeat::params::apt_repo_url,
   Optional[String] $cloud_id                                          = $metricbeat::params::cloud_id,
   Optional[String] $cloud_auth                                        = $metricbeat::params::cloud_auth,
   Array[Hash] $modules                                                = $metricbeat::params::modules,
@@ -177,6 +187,7 @@ class metricbeat(
   String $tmp_dir                                                     = $metricbeat::params::tmp_dir,
   Optional[String] $url_arch                                          = $metricbeat::params::url_arch,
   Optional[Hash] $xpack                                               = $metricbeat::params::xpack,
+  Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $yum_repo_url  = $metricbeat::params::yum_repo_url,
 ) inherits metricbeat::params {
 
   $real_download_url = $download_url ? {
