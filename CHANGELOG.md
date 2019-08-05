@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.4.0
+
+**Added**
+- Built-in Metricbeat modules may be enabled and configured through Hiera
+- Support for 7.x installations of Metricbeat
+- Cloud ID and Auth properties to simplify usage with Elastic Cloud
+
+**Fixes**
+- The command-line option `path.config` is explicitly declared in the validate commands
+
 ## Release 0.3.0
 
 **Added**

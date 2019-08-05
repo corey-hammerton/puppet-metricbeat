@@ -1,6 +1,6 @@
 {
   "name": "coreyh-metricbeat",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "author": "coreyh",
   "summary": "A module to install, configure and manage the Metricbeat collector.",
   "license": "Apache-2.0",
