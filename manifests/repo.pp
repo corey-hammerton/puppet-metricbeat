@@ -5,8 +5,14 @@
 #
 # @summary Manages the relevant repo manager on the target node.
 class metricbeat::repo inherits metricbeat {
-  $apt_repo_url = "https://artifacts.elastic.co/packages/${metricbeat::major_version}.x/apt"
-  $yum_repo_url = "https://artifacts.elastic.co/packages/${metricbeat::major_version}.x/yum"
+  $apt_repo_url = $metricbeat::apt_repo_url ? {
+    undef => "https://artifacts.elastic.co/packages/${metricbeat::major_version}.x/apt",
+    default => $metricbeat::apt_repo_url,
+  }
+  $yum_repo_url = $metricbeat::yum_repo_url ? {
+    undef => "https://artifacts.elastic.co/packages/${metricbeat::major_version}.x/yum",
+    default => $metricbeat::yum_repo_url,
+  }
 
   case $facts['osfamily'] {
     'Debian': {

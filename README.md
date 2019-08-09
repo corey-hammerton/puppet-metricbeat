@@ -200,38 +200,36 @@ Please review the [documentation](https://www.elastic.co/guide/en/beats/metricbe
 Installs and configures metricbeat.
 
 **Parameters within `metricbeat`**
+- `apt_repo_url`: [HTTP(S) URL] The URL of the APT repository to install Metricbeat from. Only applicable on Debian systems. (default: "https://artifacts.elastic.co/packages/${metricbeat::major_version}.x/apt")
+- `cloud_id`: [String] Override the `output.elasticsearch.hosts` and `setup.kibana.host` options. You can find the value in the Elastic Cloud web UI. (default: undef)
+- `cloud_auth`: [String] Override the `output.elasticsearch.username` and `output.elasticsearch.password` options. This is in the format of `<user>:<password>`. (default: undef)
 - `modules`: [Array[Hash]] The required metricbeat.modules section of the configuration.
 - `outputs`: [Hash] The required output section of the configuration.
 - `beat_name`: [String] The name of the beat shipper (default: hostname)
-- `ensure`: [String] Valid values are 'present' and 'absent'. Determines weather
-  to manage all required resources or remove them from the node. (default: 'present')
-- `disable_config_test`: [Boolean] If true, disable configuration file testing. It
-   is generally recommended to leave this parameter at this default value.
-   (default: false)
-- `fields`: [Hash] Optional fields to add any additional information to the output.
-  (default: undef)
-- `fields_under_root`: [Boolean] By default custom fields are under a `fields`
-  sub-dictionary. When set to true custom fields are added to the root-level
-  document. (default: false)
-- `logging`: [Hash] Defines metricbeat's logging configuration, if not explicitly
-  configured all logging output is forwarded to syslog on Linux nodes and file
-  output on Windows. See the [docs](https://www.elastic.co/guide/en/beats/metricbeat/current/configuration-logging.html) for all available options.
-- `manage_repo`: [Boolean] When false does not install the upstream repository
-  to the node's package manager. (default: true)
-- `package_ensure`: [String] The desired state of the Package resources. Only
-  applicable if `ensure` is 'present'. (default: 'present')
-- `processors`: [Array[Hash]] Add processors to the configuration to run on data
-  before sending to the output. (default: undef)
-- `queue`: [Hash] Configure the internal queue in packetbeat before being consumed
-  by the output(s) in 6.x versions.
-- `queue_size`: [Integer] The queue size for single events in the processing
-  pipeline. This is only applicable if `major_version` is '5'. (default: 1000)
-- `service_ensure`: [String] Determine the state of the metricbeat service. Must
-  be one of 'enabled', 'disabled', 'running', 'unmanaged'. (default: enabled)
-- `service_has_restart`: [Boolean] When true the Service resource issues the
-  'restart' command instead of 'stop' and 'start'. (default: true)
-- `tags`: [Array] Optional list of tags to help group different logical properties
-  easily. (default: undef)
+- `config_dir`: [String] The absolute path to where the Metricbeat configuration exists. (default: /etc/metricbeat on Linux, C:/Program Files/Metricbeat on Windows)
+- `config_mode`: [String] The file permission mode of the Metricbeat config file in octal format. (default: 0600)
+- `ensure`: [String] Valid values are 'present' and 'absent'. Determines weather to manage all required resources or remove them from the node. (default: 'present')
+- `disable_config_test`: [Boolean] If true, disable configuration file testing. It is generally recommended to leave this parameter at this default value. (default: false)
+- `download_url`: [HTTP(S) URL] The URL of the ZIP file to download. Only applicable on Windows systems. (default: undef)
+- `fields`: [Hash] Optional fields to add any additional information to the output. (default: undef)
+- `fields_under_root`: [Boolean] By default custom fields are under a `fields` sub-dictionary. When set to true custom fields are added to the root-level document. (default: false)
+- `install_dir`: [String] The absolute path to the location where Metricbeat will be installed. Only applicable on Windows systems. (default: C:/Program Files)
+- `logging`: [Hash] Defines metricbeat's logging configuration, if not explicitly configured all logging output is forwarded to syslog on Linux nodes and file output on Windows. See the [docs](https://www.elastic.co/guide/en/beats/metricbeat/current/configuration-logging.html) for all available options.
+- `major_version`: [String] The major version of Metricbeat to install and manage. (default: 5)
+- `manage_repo`: [Boolean] When false does not install the upstream repository to the node's package manager. (default: true)
+- `package_ensure`: [String] The desired state of the Package resources. Only applicable if `ensure` is 'present'. (default: 'present')
+- `processors`: [Array[Hash]] Add processors to the configuration to run on data before sending to the output. (default: undef)
+- `proxy_address`: [HTTP(S) URL] The proxy address used for downloading files. (default: undef)
+- `queue`: [Hash] Configure the internal queue in packetbeat before being consumed by the output(s) in 6.x versions and greater.
+- `queue_size`: [Integer] The queue size for single events in the processing pipeline. This is only applicable if `major_version` is '5'. (default: 1000)
+- `service_ensure`: [String] Determine the state of the metricbeat service. Must be one of 'enabled', 'disabled', 'running', 'unmanaged'. (default: enabled)
+- `service_has_restart`: [Boolean] When true the Service resource issues the 'restart' command instead of 'stop' and 'start'. (default: true)
+- `service_provider`: [String] The optional service provider of the node. (default: 'redhat' on RedHat nodes, undef otherwise)
+- `tags`: [Array] Optional list of tags to help group different logical properties easily. (default: undef)
+- `tmp_dir`: [String] The absolute path to a temporary directory. On Windows systems this is the target directory for the ZIP file download. (default: /tmp on Linux, C:\Windows\Temp on Windows)
+- `url_arch`: [String] The optional architecture of the target node. Only applicable on Windows systems. (default: x86 or x64)
+- `xpack`: [Hash] Configuration items to export internal stats to a monitoring Elasticsearch cluster. (default: undef)
+- `yum_repo_url`: [String] The URL of the YUM repository to install Metricbeat from. Only applicable on RedHat or Suse systems. (default: "https://artifacts.elastic.co/packages/${metricbeat::major_version}.x/yum")
 
 
 ### Private Classes

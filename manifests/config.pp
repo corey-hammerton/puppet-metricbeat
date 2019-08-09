@@ -39,7 +39,7 @@ class metricbeat::config inherits metricbeat {
 
     $metricbeat_config = deep_merge($metricbeat_config_base, $fields_tmp)
   }
-  elsif $metricbeat::major_version == '6' {
+  else {
     $metricbeat_config_base = delete_undef_values({
       'cloud.id'           => $metricbeat::cloud_id,
       'cloud.auth'         => $metricbeat::cloud_auth,

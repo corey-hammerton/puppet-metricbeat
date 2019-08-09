@@ -24,6 +24,10 @@
 # Parameters
 # ----------
 #
+# * `apt_repo_url`
+# [String] The URL of the APT repository to install Metricbeat from. Only
+# applicable on Debian systems. Default: https://artifacts.elastic.co/packages/${metricbeat::major_version}.x/apt
+#
 # * `cloud_id`
 # [String] The cloud.id setting overwrites the `output.elasticsearch.hosts` and
 # `setup.kibana.host` options. You can find the `cloud.id` in the Elastic Cloud
@@ -86,7 +90,7 @@
 #
 # * `major_version`
 # [Enum] The major version of Metricbeat to install from vendor repositories.
-# Valid values are '5' and '6'. (default: '5')
+# Valid values are '5', '6' and '7'. (default: '5')
 #
 # * `manage_repo`
 # [Boolean] Weather the upstream (elastic) repository should be
@@ -136,7 +140,7 @@
 # identifying groups of servers by logical property. (default: undef)
 #
 # * `tmp_dir`
-# String The absolute path to the temporary directory. On Windows, this
+# [String] The absolute path to the temporary directory. On Windows, this
 # is the target directory for the ZIP file download. (default: /tmp on
 # Linux, C:\Windows\Temp on Windows)
 #
@@ -147,7 +151,13 @@
 # * `xpack`
 # Optional[Hash] Configuration items to export internal stats to a
 # monitoring Elasticsearch cluster
+#
+# * `yum_repo_url`
+# [String] The URL of the YUM repo to install Metricbeat from. Only
+# applicable on RedHat or Suse based systems. 
+# Default: https://artifacts.elastic.co/packages/${metricbeat::major_version}.x/yum
 class metricbeat(
+  Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $apt_repo_url  = $metricbeat::params::apt_repo_url,
   Optional[String] $cloud_id                                          = $metricbeat::params::cloud_id,
   Optional[String] $cloud_auth                                        = $metricbeat::params::cloud_auth,
   Array[Hash] $modules                                                = $metricbeat::params::modules,
@@ -163,7 +173,7 @@ class metricbeat(
   Boolean $fields_under_root                                          = $metricbeat::params::fields_under_root,
   Optional[String] $install_dir                                       = $metricbeat::params::install_dir,
   Hash $logging                                                       = $metricbeat::params::logging,
-  Enum['5', '6'] $major_version                                       = $metricbeat::params::major_version,
+  Enum['5', '6', '7'] $major_version                                  = $metricbeat::params::major_version,
   Boolean $manage_repo                                                = $metricbeat::params::manage_repo,
   String $package_ensure                                              = $metricbeat::params::package_ensure,
   Optional[Array[Hash]] $processors                                   = $metricbeat::params::processors,
@@ -177,6 +187,7 @@ class metricbeat(
   String $tmp_dir                                                     = $metricbeat::params::tmp_dir,
   Optional[String] $url_arch                                          = $metricbeat::params::url_arch,
   Optional[Hash] $xpack                                               = $metricbeat::params::xpack,
+  Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $yum_repo_url  = $metricbeat::params::yum_repo_url,
 ) inherits metricbeat::params {
 
   $real_download_url = $download_url ? {
