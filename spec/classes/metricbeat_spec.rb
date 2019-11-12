@@ -198,6 +198,7 @@ describe 'metricbeat' do
           end
         when 'Debian'
           it { is_expected.to contain_class('apt') }
+          it { is_expected.to contain_class('apt::update').that_comes_before('Package[metricbeat]') }
 
           it do
             is_expected.to contain_apt__source('beats').with(
