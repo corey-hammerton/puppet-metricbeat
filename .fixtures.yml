@@ -9,6 +9,7 @@ fixtures:
     apt: "https://github.com/puppetlabs/puppetlabs-apt.git"
     archive: "https://github.com/voxpupuli/puppet-archive.git"
     powershell: "https://github.com/puppetlabs/puppetlabs-powershell.git"
+    pwshlib: "https://github.com/puppetlabs/ruby-pwsh.git"
     stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
     zypprepo: "https://github.com/voxpupuli/puppet-zypprepo.git"
   symlinks:
