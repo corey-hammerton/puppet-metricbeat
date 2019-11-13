@@ -29,6 +29,7 @@ class metricbeat::repo inherits metricbeat {
           },
         }
       }
+      Class['apt::update'] -> Package['metricbeat']
     }
     'RedHat': {
       if !defined(Yumrepo['beats']) {
