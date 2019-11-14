@@ -192,6 +192,7 @@ Please review the [documentation](https://www.elastic.co/guide/en/beats/metricbe
     - [Class: metricbeat::install](#class-metricbeatinstall)
     - [Class: metricbeat::repo](#class-metricbeatrepo)
     - [Class: metricbeat::service](#class-metricbeatservice)
+  - [**Custom module templates**](#custom-module-templates)
 
 ### Public Classes
 
@@ -249,6 +250,27 @@ Installs the upstream Yum or Apt repository for the system package manager.
 #### Class: `metricbeat::service`
 
 Manages the metricbeat service.
+
+### Custom module templates
+
+Define a custom configuration file in the modules.d directory using the `metricbeat::modulesd` resource type.
+
+**Parameters within `metricbeat::modulesd`**
+- `template_name`: [String] Filename of the template in modules.d
+- `config`: [Hash] For passing parameters down to the .erb template
+- `source`: Optional[String] Path for the file 'source' parameter, mutually exclusive with `content`
+- `content`: Optional[String] Path for the file 'content' parameter, mutually exclusive with `source`
+
+
+Example usage:
+
+```
+metricbeat::modulesd { 'module_name':
+  config  => $custom_hash,
+  content => template("path/to/your/template.yml.erb"),
+}
+```
+
 
 ## Limitations
 
