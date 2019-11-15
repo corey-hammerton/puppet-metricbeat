@@ -20,6 +20,6 @@ define metricbeat::modulesd(
     group   => 'root',
     mode    => '0644',
     require => Class['::metricbeat'],
-    notify  => Service['metricbeat'],
+    notify  => Class['::metricbeat::service'],
   }
 }
