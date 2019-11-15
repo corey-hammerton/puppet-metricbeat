@@ -22,32 +22,34 @@ class metricbeat::config inherits metricbeat {
 
   if $metricbeat::major_version == '5' {
     $metricbeat_config_base = delete_undef_values({
-      'cloud.id'          => $metricbeat::cloud_id,
-      'cloud.auth'        => $metricbeat::cloud_auth,
-      'name'              => $metricbeat::beat_name,
-      'tags'              => $metricbeat::tags,
-      'logging'           => $metricbeat::logging,
-      'processors'        => $metricbeat::processors,
-      'queue_size'        => $metricbeat::queue_size,
-      'metricbeat'        => {
-        'modules'           => $metricbeat::modules,
+      'cloud.id'                       => $metricbeat::cloud_id,
+      'cloud.auth'                     => $metricbeat::cloud_auth,
+      'name'                           => $metricbeat::beat_name,
+      'tags'                           => $metricbeat::tags,
+      'logging'                        => $metricbeat::logging,
+      'processors'                     => $metricbeat::processors,
+      'queue_size'                     => $metricbeat::queue_size,
+      'metricbeat'                     => {
+        'modules' => $metricbeat::modules,
       },
-      'output'            => $metricbeat::outputs,
+      'output'                         => $metricbeat::outputs,
+      'metricbeat.config.modules.path' => '${path.config}/modules.d/*.yml',
     })
 
     $metricbeat_config = deep_merge($metricbeat_config_base, $fields_tmp)
   }
   else {
     $metricbeat_config_base = delete_undef_values({
-      'cloud.id'           => $metricbeat::cloud_id,
-      'cloud.auth'         => $metricbeat::cloud_auth,
-      'name'               => $metricbeat::beat_name,
-      'tags'               => $metricbeat::tags,
-      'logging'            => $metricbeat::logging,
-      'processors'         => $metricbeat::processors,
-      'queue'              => $metricbeat::queue,
-      'metricbeat.modules' => $modules_arr,
-      'output'             => $metricbeat::outputs,
+      'cloud.id'                       => $metricbeat::cloud_id,
+      'cloud.auth'                     => $metricbeat::cloud_auth,
+      'name'                           => $metricbeat::beat_name,
+      'tags'                           => $metricbeat::tags,
+      'logging'                        => $metricbeat::logging,
+      'processors'                     => $metricbeat::processors,
+      'queue'                          => $metricbeat::queue,
+      'metricbeat.modules'             => $modules_arr,
+      'output'                         => $metricbeat::outputs,
+      'metricbeat.config.modules.path' => '${path.config}/modules.d/*.yml',
     })
 
     $metricbeat_config_temp = deep_merge($metricbeat_config_base, $fields_tmp)
@@ -62,17 +64,12 @@ class metricbeat::config inherits metricbeat {
 
   }
 
-  # extra modules under `modules.d` folder, if any
+  # Create modules.d files that exist in hiera then collect any created via exported resources
   $module_templates_real = hiera_array('metricbeat::module_templates', $metricbeat::module_templates)
-  each($module_templates_real) |$module_name| {
-    file { "${metricbeat::config_dir}/modules.d/${module_name}.yml":
-      ensure => present,
-      source => "puppet:///modules/metricbeat/${module_name}.yml",
-      owner  => 'root',
-      group  => 'root',
-      mode   => '0644',
-    }
+  $module_templates_real.each |$module| {
+    @@metricbeat::modulesd { $module: }
   }
+  Metricbeat::Modulesd <<||>>
 
   case $::kernel {
     'Linux': {
