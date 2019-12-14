@@ -20,6 +20,8 @@ class metricbeat::config inherits metricbeat {
     } else {
       $fields_tmp = $metricbeat::fields
     }
+  } else {
+      $fields_tmp = $metricbeat::fields
   }
 
   if $metricbeat::major_version == '5' {
