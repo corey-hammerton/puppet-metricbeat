@@ -37,7 +37,7 @@ class metricbeat::config inherits metricbeat {
         'modules' => $metricbeat::modules,
       },
       'output'                         => $metricbeat::outputs,
-      'metricbeat.config.modules.path' => '${path.config}/modules.d/*.yml',
+      'metricbeat.config.modules.path' => "${metricbeat::config_dir}/modules.d/*.yml",
     })
 
     $metricbeat_config = deep_merge($metricbeat_config_base, $fields_tmp)
@@ -54,7 +54,7 @@ class metricbeat::config inherits metricbeat {
       'fields_under_root'              => $metricbeat::fields_under_root,
       'metricbeat.modules'             => $modules_arr,
       'output'                         => $metricbeat::outputs,
-      'metricbeat.config.modules.path' => '${path.config}/modules.d/*.yml',
+      'metricbeat.config.modules.path' => "${metricbeat::config_dir}/modules.d/*.yml",
     })
 
     if $fields_tmp {
