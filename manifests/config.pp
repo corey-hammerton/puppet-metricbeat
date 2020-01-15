@@ -15,11 +15,7 @@ class metricbeat::config inherits metricbeat {
 
   # if fields are "under root", then remove prefix
   if $metricbeat::fields_under_root == true {
-    if $metricbeat::fields_under_root == true {
       $fields_tmp = $metricbeat::fields.each | $key, $value | { {$key => $value} }
-    } else {
-      $fields_tmp = $metricbeat::fields
-    }
   } else {
       $fields_tmp = $metricbeat::fields
   }
