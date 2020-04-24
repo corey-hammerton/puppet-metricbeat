@@ -6,8 +6,13 @@
 # @summary Manages Metricbeat's configuration file
 class metricbeat::config inherits metricbeat {
 
+  # Use lookup to merge metricbeat::modules config from different levels of hiera
+  $modules_lookup = lookup('metricbeat::modules', undef, 'unique', undef)
+  # Check to see if anything has been confiugred in hiera
+  if $modules_lookup {
+    $modules_arr = $modules_lookup
   # check if array is empty, no need to create a config entry then
-  if $metricbeat::modules[0].length() > 0 {
+  } elsif $metricbeat::modules[0].length() > 0 {
     $modules_arr = $metricbeat::modules
   } else {
     $modules_arr = undef
