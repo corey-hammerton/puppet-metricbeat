@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.4.1
+
+**Added**
+- Custom resource `metricbeat::modulesd`
+
+**Fixes**
+- Updating dependencies to newer major version
+
 ## Release 0.4.0
 
 **Added**
