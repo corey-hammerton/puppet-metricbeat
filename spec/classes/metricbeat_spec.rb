@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'metricbeat' do
-  on_supported_os(facterversion: '2.4').each do |os, os_facts|
+  on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       let(:facts) { os_facts }
 
@@ -127,15 +127,21 @@ describe 'metricbeat' do
 
       describe 'metricbeat::install' do
         if os_facts[:kernel] == 'windows'
+          context 'with shell extractor' do
+            let(:params) { { 'extract_method' => 'shell' } }
+
+            it {
+              is_expected.to contain_exec('unzip metricbeat-6.6.1-windows-x86_64').with(
+                command: "\$sh=New-Object -COM Shell.Application;\$sh.namespace((Convert-Path 'C:/Program Files')).Copyhere(\$sh.namespace((Convert-Path 'C:/Windows/Temp/metricbeat-6.6.1-windows-x86_64.zip')).items(), 16)", # rubocop:disable LineLength
+                creates: 'C:/Program Files/Metricbeat/metricbeat-6.6.1-windows-x86_64',
+              )
+            }
+          end
           it do
             is_expected.to contain_file('C:/Program Files').with(ensure: 'directory')
             is_expected.to contain_archive('C:/Windows/Temp/metricbeat-6.6.1-windows-x86_64.zip').with(
               creates: 'C:/Program Files/Metricbeat/metricbeat-6.6.1-windows-x86_64',
               source: 'https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-6.6.1-windows-x86_64.zip',
-            )
-            is_expected.to contain_exec('unzip metricbeat-6.6.1-windows-x86_64').with(
-              command: "\$sh=New-Object -COM Shell.Application;\$sh.namespace((Convert-Path 'C:/Program Files')).Copyhere(\$sh.namespace((Convert-Path 'C:/Windows/Temp/metricbeat-6.6.1-windows-x86_64.zip')).items(), 16)", # rubocop:disable LineLength
-              creates: 'C:/Program Files/Metricbeat/metricbeat-6.6.1-windows-x86_64',
             )
             is_expected.to contain_exec('stop service metricbeat-6.6.1-windows-x86_64').with(
               creates: 'C:/Program Files/Metricbeat/metricbeat-6.6.1-windows-x86_64',
