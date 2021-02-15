@@ -12,6 +12,7 @@ class metricbeat::params {
   $config_mode        = '0600'
   $disable_configtest = false
   $download_url       = undef
+  $extract_method     = 'shell'
   $fields             = undef
   $fields_under_root  = false
   $manage_repo        = true

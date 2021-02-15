@@ -71,6 +71,11 @@
 # from the target node. This is good for bulk uninstallation across a
 # network. Valid values are 'present' or 'absent'. (default: 'present')
 #
+# * `extract_method`
+# [Enum] Select which extraction method to use for the downloaded zip file.
+# Only valid on Windows nodes.
+# Valid values are `shell` or `archive`
+#
 # * `fields`
 # Optional[Hash] Optional fields to add to each transaction to provide
 # additonal information. (default: undef)
@@ -169,6 +174,7 @@ class metricbeat(
   Boolean $disable_configtest                                         = $metricbeat::params::disable_configtest,
   Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $download_url  = $metricbeat::params::download_url,
   Enum['present', 'absent'] $ensure                                   = $metricbeat::params::ensure,
+  Enum['shell', 'archive'] $extract_method                            = $metricbeat::params::extract_method,
   Optional[Hash] $fields                                              = $metricbeat::params::fields,
   Boolean $fields_under_root                                          = $metricbeat::params::fields_under_root,
   Optional[String] $install_dir                                       = $metricbeat::params::install_dir,
