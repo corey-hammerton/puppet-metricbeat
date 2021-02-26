@@ -161,6 +161,10 @@
 # [String] The URL of the YUM repo to install Metricbeat from. Only
 # applicable on RedHat or Suse based systems. 
 # Default: https://artifacts.elastic.co/packages/${metricbeat::major_version}.x/yum
+#
+# * `setup`
+# [Hash] Setup that will be created. Commonly used to create setup using hiera
+#
 class metricbeat(
   Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $apt_repo_url  = $metricbeat::params::apt_repo_url,
   Optional[String] $cloud_id                                          = $metricbeat::params::cloud_id,
@@ -194,6 +198,7 @@ class metricbeat(
   Optional[String] $url_arch                                          = $metricbeat::params::url_arch,
   Optional[Hash] $xpack                                               = $metricbeat::params::xpack,
   Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $yum_repo_url  = $metricbeat::params::yum_repo_url,
+  Hash    $setup                                                      = {},
 ) inherits metricbeat::params {
 
   $real_download_url = $download_url ? {
