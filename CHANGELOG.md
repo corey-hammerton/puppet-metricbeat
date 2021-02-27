@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## Release 0.4.2
+
+**Added**
+- Parameter `$metricbeat::extract_method` to select which extraction method to use for the downloaded zip file. Only applicable for Windows. Valid values are `shell` and `archive`
+- Parameter `$metricbeat::setup` to add common configuration options for metricbeat.yml across a deployment. Typically useful for Heira
+
+**Fixes**
+- Updating the Powershell dependency requirement to use < 5.0.0 versions
+
 ## Release 0.4.1
 
 **Added**
