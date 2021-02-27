@@ -31,10 +31,6 @@ jobs:
       env: CHECK="check:symlinks check:git_ignore check:dot_underscore check:test_file rubocop syntax lint metadata_lint"
       stage: static
     -
-      env: PUPPET_GEM_VERSION="~> 5.0" CHECK=parallel_spec
-      rvm: 2.4.5
-      stage: spec
-    -
       env: PUPPET_GEM_VERSION="~> 6.0" CHECK=parallel_spec
       rvm: 2.5.7
       stage: spec
@@ -43,15 +39,7 @@ jobs:
       stage: deploy
 branches:
   only:
-    - master
+    - main
     - /^v\d/
 notifications:
   email: false
-deploy:
-   provider: puppetforge
-   user: "corey.hammerton@gmail.com"
-   password:
-     secure: "Ycw2OI+/6PG18XhPcuZFiWh7Uo/qbeQzn0M49x/+IczxKuo6M68H4QxA/bDh33+SsFOCifbY4Cz6xQZEGkjAzeRRT8VyP13ZxIZXaLmBDtXfRiDuqm9tWzddQMNapDF9fLu21x65wy71OBm/Gjw2ArF50YdbodfCdNL3WEWw6iwL4r8siB3SKleYPRZeAgwE5N0jrTf5m/9dNBAmm66evhB83o5qm4nZodCoKNQg95j0wv40fTsdSGQzYTdCiTAzf9d8y76MmoITGKiF1b3h53wnth4zesbKPUT1rnqtFArAP2M2vcNK1lv4PreF/81BQlmcoI/K0/4bNfq++KkOtdz8tU/7tVvk1ul2mAfOg0QfOuh75GBmXtgzc8vSzOzhiKX4mrFG9gf6U9XAqI7fEdhWdTRLpFhjGgHlL6PpxI8kO2o7cOonoRPs7gJ/ppCNW0V+Qao2sHaW/rclGdkYVnYxVUlcEf0VtVM7hD6S7UeM0x2VA3iwWCQKr08P5v80RwCU6bKCBq5P4tmrI/XQGms6TidmBKZzUAS/Rt2DQCfsDpsR2LdgLzGs6oQW5gHN5ZWdknXBIbfNvUuS4DpmES08DbEUv+gahiNgekq07R/drPMRUkLLvguN2zW5W4TPAW312mGBl16pxIq3FsZbOxHWPcbstlQKvk0iYAuDoPw="
-   on:
-     condition: $DEPLOY_TO_FORGE = yes
-     tags: true
