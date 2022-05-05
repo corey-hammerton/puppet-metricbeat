@@ -159,7 +159,7 @@
 #
 # * `yum_repo_url`
 # [String] The URL of the YUM repo to install Metricbeat from. Only
-# applicable on RedHat or Suse based systems. 
+# applicable on RedHat or Suse based systems.
 # Default: https://artifacts.elastic.co/packages/${metricbeat::major_version}.x/yum
 #
 # * `setup`
@@ -183,7 +183,7 @@ class metricbeat(
   Boolean $fields_under_root                                          = $metricbeat::params::fields_under_root,
   Optional[String] $install_dir                                       = $metricbeat::params::install_dir,
   Hash $logging                                                       = $metricbeat::params::logging,
-  Enum['5', '6', '7'] $major_version                                  = $metricbeat::params::major_version,
+  Enum['5', '6', '7', '8'] $major_version                             = $metricbeat::params::major_version,
   Boolean $manage_repo                                                = $metricbeat::params::manage_repo,
   String $package_ensure                                              = $metricbeat::params::package_ensure,
   Optional[Array[Hash]] $processors                                   = $metricbeat::params::processors,
