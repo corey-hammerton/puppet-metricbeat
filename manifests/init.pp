@@ -127,8 +127,8 @@
 #
 # * `service_ensure`
 # [String] The desirec state of Service['metricbeat']. Only valid when
-# $ensure is present. Valid values are 'enabled', 'disabled', 'running'
-# or 'unmanaged'. (default: 'enabled')
+# $ensure is present. Valid values are 'enabled', 'disabled', 'running',
+# 'unmanaged' or 'managed'. (default: 'enabled')
 #
 # * `service_has_restart`
 # [Boolean] When true use the restart function of the init script.
@@ -166,39 +166,39 @@
 # [Hash] Setup that will be created. Commonly used to create setup using hiera
 #
 class metricbeat(
-  Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $apt_repo_url  = $metricbeat::params::apt_repo_url,
-  Optional[String] $cloud_id                                          = $metricbeat::params::cloud_id,
-  Optional[String] $cloud_auth                                        = $metricbeat::params::cloud_auth,
-  Array[Hash] $modules                                                = $metricbeat::params::modules,
-  Array[String] $module_templates                                     = $metricbeat::params::module_templates,
-  Hash $outputs                                                       = $metricbeat::params::outputs,
-  String $beat_name                                                   = $metricbeat::params::beat_name,
-  String $config_dir                                                  = $metricbeat::params::config_dir,
-  Pattern[/^0[0-7]{3}$/] $config_mode                                 = $metricbeat::params::config_mode,
-  Boolean $disable_configtest                                         = $metricbeat::params::disable_configtest,
-  Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $download_url  = $metricbeat::params::download_url,
-  Enum['present', 'absent'] $ensure                                   = $metricbeat::params::ensure,
-  Enum['shell', 'archive'] $extract_method                            = $metricbeat::params::extract_method,
-  Optional[Hash] $fields                                              = $metricbeat::params::fields,
-  Boolean $fields_under_root                                          = $metricbeat::params::fields_under_root,
-  Optional[String] $install_dir                                       = $metricbeat::params::install_dir,
-  Hash $logging                                                       = $metricbeat::params::logging,
-  Enum['5', '6', '7', '8'] $major_version                             = $metricbeat::params::major_version,
-  Boolean $manage_repo                                                = $metricbeat::params::manage_repo,
-  String $package_ensure                                              = $metricbeat::params::package_ensure,
-  Optional[Array[Hash]] $processors                                   = $metricbeat::params::processors,
-  Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $proxy_address = $metricbeat::params::proxy_address,
-  Hash $queue                                                         = $metricbeat::params::queue,
-  Integer $queue_size                                                 = $metricbeat::params::queue_size,
-  Enum['enabled', 'disabled', 'running', 'unmanaged'] $service_ensure = $metricbeat::params::service_ensure,
-  Boolean $service_has_restart                                        = $metricbeat::params::service_has_restart,
-  Optional[String] $service_provider                                  = $metricbeat::params::service_provider,
-  Optional[Array[String]] $tags                                       = $metricbeat::params::tags,
-  String $tmp_dir                                                     = $metricbeat::params::tmp_dir,
-  Optional[String] $url_arch                                          = $metricbeat::params::url_arch,
-  Optional[Hash] $xpack                                               = $metricbeat::params::xpack,
-  Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $yum_repo_url  = $metricbeat::params::yum_repo_url,
-  Hash    $setup                                                      = {},
+  Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $apt_repo_url             = $metricbeat::params::apt_repo_url,
+  Optional[String] $cloud_id                                                     = $metricbeat::params::cloud_id,
+  Optional[String] $cloud_auth                                                   = $metricbeat::params::cloud_auth,
+  Array[Hash] $modules                                                           = $metricbeat::params::modules,
+  Array[String] $module_templates                                                = $metricbeat::params::module_templates,
+  Hash $outputs                                                                  = $metricbeat::params::outputs,
+  String $beat_name                                                              = $metricbeat::params::beat_name,
+  String $config_dir                                                             = $metricbeat::params::config_dir,
+  Pattern[/^0[0-7]{3}$/] $config_mode                                            = $metricbeat::params::config_mode,
+  Boolean $disable_configtest                                                    = $metricbeat::params::disable_configtest,
+  Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $download_url             = $metricbeat::params::download_url,
+  Enum['present', 'absent'] $ensure                                              = $metricbeat::params::ensure,
+  Enum['shell', 'archive'] $extract_method                                       = $metricbeat::params::extract_method,
+  Optional[Hash] $fields                                                         = $metricbeat::params::fields,
+  Boolean $fields_under_root                                                     = $metricbeat::params::fields_under_root,
+  Optional[String] $install_dir                                                  = $metricbeat::params::install_dir,
+  Hash $logging                                                                  = $metricbeat::params::logging,
+  Enum['5', '6', '7', '8'] $major_version                                        = $metricbeat::params::major_version,
+  Boolean $manage_repo                                                           = $metricbeat::params::manage_repo,
+  String $package_ensure                                                         = $metricbeat::params::package_ensure,
+  Optional[Array[Hash]] $processors                                              = $metricbeat::params::processors,
+  Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $proxy_address            = $metricbeat::params::proxy_address,
+  Hash $queue                                                                    = $metricbeat::params::queue,
+  Integer $queue_size                                                            = $metricbeat::params::queue_size,
+  Enum['enabled', 'disabled', 'running', 'unmanaged', 'managed'] $service_ensure = $metricbeat::params::service_ensure,
+  Boolean $service_has_restart                                                   = $metricbeat::params::service_has_restart,
+  Optional[String] $service_provider                                             = $metricbeat::params::service_provider,
+  Optional[Array[String]] $tags                                                  = $metricbeat::params::tags,
+  String $tmp_dir                                                                = $metricbeat::params::tmp_dir,
+  Optional[String] $url_arch                                                     = $metricbeat::params::url_arch,
+  Optional[Hash] $xpack                                                          = $metricbeat::params::xpack,
+  Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $yum_repo_url             = $metricbeat::params::yum_repo_url,
+  Hash    $setup                                                                 = {},
 ) inherits metricbeat::params {
 
   $real_download_url = $download_url ? {

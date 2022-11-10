@@ -23,6 +23,10 @@ class metricbeat::service inherits metricbeat {
         $service_ensure = undef
         $service_enable = false
       }
+      'managed': {
+        $service_ensure = undef
+        $service_enable = undef
+      }
       default: {
       }
     }

@@ -390,6 +390,18 @@ describe 'metricbeat' do
             )
           end
         end
+
+        describe 'with service_ensure = managed' do
+          let(:params) { { 'service_ensure' => 'managed' } }
+
+          it do
+            is_expected.to contain_service('metricbeat').with(
+              ensure: nil,
+              enable: nil,
+              hasrestart: true,
+            )
+          end
+        end
       end
 
       context 'with elasticsearch output' do
