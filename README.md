@@ -223,7 +223,7 @@ Installs and configures metricbeat.
 - `proxy_address`: [HTTP(S) URL] The proxy address used for downloading files. (default: undef)
 - `queue`: [Hash] Configure the internal queue in packetbeat before being consumed by the output(s) in 6.x versions and greater.
 - `queue_size`: [Integer] The queue size for single events in the processing pipeline. This is only applicable if `major_version` is '5'. (default: 1000)
-- `service_ensure`: [String] Determine the state of the metricbeat service. Must be one of 'enabled', 'disabled', 'running', 'unmanaged'. (default: enabled)
+- `service_ensure`: [String] Determine the state of the metricbeat service. Must be one of 'enabled', 'disabled', 'running', 'unmanaged', "managed". (default: enabled)
 - `service_has_restart`: [Boolean] When true the Service resource issues the 'restart' command instead of 'stop' and 'start'. (default: true)
 - `service_provider`: [String] The optional service provider of the node. (default: 'redhat' on RedHat nodes, undef otherwise)
 - `tags`: [Array] Optional list of tags to help group different logical properties easily. (default: undef)
