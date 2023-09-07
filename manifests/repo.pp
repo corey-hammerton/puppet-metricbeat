@@ -14,7 +14,7 @@ class metricbeat::repo inherits metricbeat {
     default => $metricbeat::yum_repo_url,
   }
 
-  case $facts['osfamily'] {
+  case $facts['os']['family'] {
     'Debian': {
       include ::apt
 
