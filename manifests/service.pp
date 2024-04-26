@@ -32,7 +32,7 @@ class metricbeat::service inherits metricbeat {
     $service_enable = false
   }
 
-  service{'metricbeat':
+  service { 'metricbeat':
     ensure     => $service_ensure,
     enable     => $service_enable,
     hasrestart => $metricbeat::service_has_restart,

@@ -165,7 +165,7 @@
 # * `setup`
 # [Hash] Setup that will be created. Commonly used to create setup using hiera
 #
-class metricbeat(
+class metricbeat (
   Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $apt_repo_url  = $metricbeat::params::apt_repo_url,
   Optional[String] $cloud_id                                          = $metricbeat::params::cloud_id,
   Optional[String] $cloud_auth                                        = $metricbeat::params::cloud_auth,
@@ -200,14 +200,13 @@ class metricbeat(
   Optional[Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]] $yum_repo_url  = $metricbeat::params::yum_repo_url,
   Hash    $setup                                                      = {},
 ) inherits metricbeat::params {
-
   $real_download_url = $download_url ? {
     undef   => "https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-${package_ensure}-windows-${metricbeat::params::url_arch}.zip",
     default => $download_url,
   }
 
   if $manage_repo {
-    class{'metricbeat::repo':}
+    class { 'metricbeat::repo': }
 
     Class['metricbeat::repo']
     -> Class['metricbeat::install']
@@ -228,8 +227,8 @@ class metricbeat(
     -> Class['metricbeat::install']
   }
 
-  anchor{'metricbeat::begin':}
-  class{'metricbeat::config':}
-  class{'metricbeat::install':}
-  class{'metricbeat::service':}
+  anchor { 'metricbeat::begin': }
+  class { 'metricbeat::config': }
+  class { 'metricbeat::install': }
+  class { 'metricbeat::service': }
 }

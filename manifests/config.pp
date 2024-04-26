@@ -5,13 +5,12 @@
 #
 # @summary Manages Metricbeat's configuration file
 class metricbeat::config inherits metricbeat {
-
   # Use lookup to merge metricbeat::modules config from different levels of hiera
   $modules_lookup = lookup('metricbeat::modules', undef, 'unique', undef)
   # Check to see if anything has been confiugred in hiera
   if $modules_lookup {
     $modules_arr = $modules_lookup
-  # check if array is empty, no need to create a config entry then
+    # check if array is empty, no need to create a config entry then
   } elsif $metricbeat::modules[0].length() > 0 {
     $modules_arr = $metricbeat::modules
   } else {
@@ -20,44 +19,44 @@ class metricbeat::config inherits metricbeat {
 
   # if fields are "under root", then remove prefix
   if $metricbeat::fields_under_root == true {
-      $fields_tmp = $metricbeat::fields.each | $key, $value | { {$key => $value} }
+    $fields_tmp = $metricbeat::fields.each | $key, $value | {{ $key => $value } }
   } else {
-      $fields_tmp = $metricbeat::fields
+    $fields_tmp = $metricbeat::fields
   }
 
   if $metricbeat::major_version == '5' {
     $metricbeat_config_base = delete_undef_values({
-      'cloud.id'                       => $metricbeat::cloud_id,
-      'cloud.auth'                     => $metricbeat::cloud_auth,
-      'name'                           => $metricbeat::beat_name,
-      'tags'                           => $metricbeat::tags,
-      'logging'                        => $metricbeat::logging,
-      'processors'                     => $metricbeat::processors,
-      'queue_size'                     => $metricbeat::queue_size,
-      'metricbeat'                     => {
-        'modules' => $metricbeat::modules,
-      },
-      'output'                         => $metricbeat::outputs,
-      'metricbeat.config.modules.path' => "${metricbeat::config_dir}/modules.d/*.yml",
-      'setup'                          => $metricbeat::setup,
+        'cloud.id'                       => $metricbeat::cloud_id,
+        'cloud.auth'                     => $metricbeat::cloud_auth,
+        'name'                           => $metricbeat::beat_name,
+        'tags'                           => $metricbeat::tags,
+        'logging'                        => $metricbeat::logging,
+        'processors'                     => $metricbeat::processors,
+        'queue_size'                     => $metricbeat::queue_size,
+        'metricbeat'                     => {
+          'modules' => $metricbeat::modules,
+        },
+        'output'                         => $metricbeat::outputs,
+        'metricbeat.config.modules.path' => "${metricbeat::config_dir}/modules.d/*.yml",
+        'setup'                          => $metricbeat::setup,
     })
 
     $metricbeat_config = deep_merge($metricbeat_config_base, $fields_tmp)
   }
   else {
     $metricbeat_config_base = delete_undef_values({
-      'cloud.id'                       => $metricbeat::cloud_id,
-      'cloud.auth'                     => $metricbeat::cloud_auth,
-      'name'                           => $metricbeat::beat_name,
-      'tags'                           => $metricbeat::tags,
-      'logging'                        => $metricbeat::logging,
-      'processors'                     => $metricbeat::processors,
-      'queue'                          => $metricbeat::queue,
-      'fields_under_root'              => $metricbeat::fields_under_root,
-      'metricbeat.modules'             => $modules_arr,
-      'output'                         => $metricbeat::outputs,
-      'metricbeat.config.modules.path' => "${metricbeat::config_dir}/modules.d/*.yml",
-      'setup'                          => $metricbeat::setup,
+        'cloud.id'                       => $metricbeat::cloud_id,
+        'cloud.auth'                     => $metricbeat::cloud_auth,
+        'name'                           => $metricbeat::beat_name,
+        'tags'                           => $metricbeat::tags,
+        'logging'                        => $metricbeat::logging,
+        'processors'                     => $metricbeat::processors,
+        'queue'                          => $metricbeat::queue,
+        'fields_under_root'              => $metricbeat::fields_under_root,
+        'metricbeat.modules'             => $modules_arr,
+        'output'                         => $metricbeat::outputs,
+        'metricbeat.config.modules.path' => "${metricbeat::config_dir}/modules.d/*.yml",
+        'setup'                          => $metricbeat::setup,
     })
 
     if $fields_tmp {
@@ -69,12 +68,11 @@ class metricbeat::config inherits metricbeat {
 
     # Add the 'xpack' section if supported (version >= 6.2.0)
     if versioncmp($metricbeat::package_ensure, '6.2.0') >= 0 {
-      $metricbeat_config = deep_merge($metricbeat_config_temp, {'xpack' => $metricbeat::xpack})
+      $metricbeat_config = deep_merge($metricbeat_config_temp, { 'xpack' => $metricbeat::xpack })
     }
     else {
       $metricbeat_config = $metricbeat_config_temp
     }
-
   }
 
   # Create modules.d files that exist in hiera then collect any created via exported resources
@@ -84,7 +82,7 @@ class metricbeat::config inherits metricbeat {
   }
   Metricbeat::Modulesd <<||>>
 
-  case $::kernel {
+  case $facts['kernel'] {
     'Linux': {
       $validate_cmd = $metricbeat::disable_configtest ? {
         true    => undef,
@@ -94,7 +92,7 @@ class metricbeat::config inherits metricbeat {
         }
       }
 
-      file{'metricbeat.yml':
+      file { 'metricbeat.yml':
         ensure       => $metricbeat::ensure,
         path         => "${metricbeat::config_dir}/metricbeat.yml",
         owner        => 'root',
@@ -115,7 +113,7 @@ class metricbeat::config inherits metricbeat {
         }
       }
 
-      file{'metricbeat.yml':
+      file { 'metricbeat.yml':
         ensure       => $metricbeat::ensure,
         path         => "${metricbeat::config_dir}/metricbeat.yml",
         content      => inline_template('<%= @metricbeat_config.to_yaml() %>'),
@@ -123,7 +121,7 @@ class metricbeat::config inherits metricbeat {
       }
     }
     default: {
-      fail("${::kernel} is not supported by metricbeat.")
+      fail("${facts['kernel']} is not supported by metricbeat.")
     }
   }
 }

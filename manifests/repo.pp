@@ -16,10 +16,10 @@ class metricbeat::repo inherits metricbeat {
 
   case $facts['os']['family'] {
     'Debian': {
-      include ::apt
+      include apt
 
       if !defined(Apt::Source['beats']) {
-        apt::source{'beats':
+        apt::source { 'beats':
           location => $apt_repo_url,
           release  => 'stable',
           repos    => 'main',
@@ -33,7 +33,7 @@ class metricbeat::repo inherits metricbeat {
     }
     'RedHat': {
       if !defined(Yumrepo['beats']) {
-        yumrepo{'beats':
+        yumrepo { 'beats':
           descr    => "Elastic repository for ${metricbeat::major_version}.x packages",
           baseurl  => $yum_repo_url,
           gpgcheck => 1,
@@ -46,10 +46,10 @@ class metricbeat::repo inherits metricbeat {
       exec { 'topbeat_suse_import_gpg':
         command => '/usr/bin/rpmkeys --import https://artifacts.elastic.co/GPG-KEY-elasticsearch',
         unless  => '/usr/bin/test $(rpm -qa gpg-pubkey | grep -i "D88E42B4" | wc -l) -eq 1 ',
-        notify  => [ Zypprepo['beats'] ],
+        notify  => [Zypprepo['beats']],
       }
       if !defined (Zypprepo['beats']) {
-        zypprepo{'beats':
+        zypprepo { 'beats':
           baseurl     => $yum_repo_url,
           enabled     => 1,
           autorefresh => 1,

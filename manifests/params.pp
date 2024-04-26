@@ -39,7 +39,7 @@ class metricbeat::params {
   $apt_repo_url        = undef
   $yum_repo_url        = undef
 
-  case $::kernel {
+  case $facts['kernel'] {
     'Linux': {
       $config_dir = '/etc/metricbeat'
       $install_dir = undef
@@ -96,7 +96,7 @@ class metricbeat::params {
       }
     }
     default: {
-      fail("${::kernel} is not supported by metricbeat.")
+      fail("${facts['kernel']} is not supported by metricbeat.")
     }
   }
 }
