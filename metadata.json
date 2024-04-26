@@ -102,7 +102,7 @@
     "logstash",
     "elastic"
   ],
-  "pdk-version": "2.0.0",
-  "template-url": "pdk-default#2.0.0",
-  "template-ref": "tags/2.0.0-0-ge838f1d"
+  "pdk-version": "3.0.1",
+  "template-url": "pdk-default#3.0.1",
+  "template-ref": "tags/3.0.1-0-gd13288a"
 }
