@@ -10,27 +10,27 @@
   "dependencies": [
     {
       "name": "puppetlabs-stdlib",
-      "version_requirement": ">= 4.13.0 < 7.0.0"
+      "version_requirement": ">= 4.13.0 < 11.0.0"
     },
     {
       "name": "puppetlabs-apt",
-      "version_requirement": ">= 4.0.0 < 8.0.0"
+      "version_requirement": ">= 4.0.0 < 12.0.0"
     },
     {
       "name": "puppet/archive",
-      "version_requirement": ">= 0.5.0 < 5.0.0"
+      "version_requirement": ">= 0.5.0 < 10.0.0"
     },
     {
       "name": "puppetlabs-powershell",
-      "version_requirement": ">= 1.0.1 < 5.0.0"
+      "version_requirement": ">= 1.0.1 < 7.0.0"
     },
     {
       "name": "puppet-zypprepo",
-      "version_requirement": ">= 2.0.0 < 4.0.0"
+      "version_requirement": ">= 2.0.0 < 7.0.0"
     },
     {
       "name": "puppetlabs-pwshlib",
-      "version_requirement": ">= 0.1.0 < 1.0.0"
+      "version_requirement": ">= 0.1.0 < 3.0.0"
     }
   ],
   "operatingsystem_support": [
